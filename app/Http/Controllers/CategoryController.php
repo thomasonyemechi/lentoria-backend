@@ -16,11 +16,7 @@ class CategoryController extends Controller
             'name' => 'required',
         ]);
 
-        if ($validated->fails())
-        {
-            return response(['errors' => $validated->errors()->all()], 422);
-
-        }
+        if ($validated->fails()) { return response(['errors' => $validated->errors()->all()], 422); }
         $category->name = $request->input('name');
         $category->save();
         return response(['success' => 'Category Added'], 200);
@@ -28,32 +24,23 @@ class CategoryController extends Controller
 
     function update(Request $request)
     {
+        Category::where('id', $request->id)->update([
+            'name' => $request->name
+        ]);
 
-        $category = Category::find($request->id);
-
-        $category->name = $request->name;
-        $category->save();
-
-        return response($category, 200);
+        return response([
+            'message' => 'Category has been updated sucesfully',
+        ]);
 
     }
 
     function status(Request $request)
     {
-
         $category = Category::find($request->id);
-
-        if ($category->status == 1)
-        {
-            $category->status = 0;
-        }
-        else
-        {
-            $category->status = 1;
-        }
-
-        $category->save();
-
-        return response([$category, 'message' => 'success'], 200);
+        $new_status = ($category->status == 1) ? 0 : 1;
+        $category->update([
+            'status' => $new_status
+        ]);
+        return response(['message' => 'success'], 200);
     }
 }
