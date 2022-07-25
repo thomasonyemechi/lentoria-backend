@@ -16,21 +16,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/testing', [AuthController::class, 'createUser']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/add_category', [CategoryController::class , 'create']);
-Route::get('category/{id}', [CategoryController::class , 'edit']);
-Route::post('/user_login', [AuthController::class, 'login']);
+Route::post('/user_login', [AuthController::class , 'login']);
 Route::post('/user_signup', [AuthController::class , 'signup']);
-Route::post('/category/{id}', [CategoryController::class , 'update']);
 
 
 
 
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
+
+    Route::get('/checklogged', [AuthController::class , 'log2']);
+
+    Route::post('/add_category', [CategoryController::class , 'create']);
+    Route::get('category/{id}', [CategoryController::class , 'edit']);
 
 
-Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth:api'] ], function (){
+    Route::post('/category/{id}', [CategoryController::class , 'update']);
 
-    Route::get('/checklogged', [AuthController::class, 'log2']);
+Route::post('/status', [CategoryController::class , 'status']);
 
 });
