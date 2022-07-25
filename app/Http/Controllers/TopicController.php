@@ -16,7 +16,7 @@ class TopicController extends Controller
             'category_id' => 'required|exists:categories,id',
         ]);
         if ($validation->fails()) {
-            return response(['errors' => $validation->errors()->all()], 401);
+            return response(['errors' => $validation->errors()->all()], 422);
         }
 
         $topics = Topic::create($request->all());
@@ -30,4 +30,15 @@ class TopicController extends Controller
 
         return response(['data' => $topics], 200);
     }
+
+    function update(Request $request)
+    {
+        Topic::where('id', $request->id)->update([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
+        return response(['message' => 'Category has been updated sucesfully',],200);
+
+    }
+
 }
