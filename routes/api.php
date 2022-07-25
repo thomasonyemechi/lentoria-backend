@@ -24,7 +24,7 @@ Route::post('/user_signup', [AuthController::class, 'signup']);
 
 
 
-Route::group(['middleware' => ['auth:api'] ], function (){
+Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth:api'] ], function (){
 
     Route::get('/checklogged', [AuthController::class, 'log2']);
 
