@@ -43,4 +43,12 @@ class CategoryController extends Controller
         ]);
         return response(['message' => 'success'], 200);
     }
+
+
+    function fetchCategory()
+    {
+        return response([
+            'data' => Category::get()
+        ]);
+    }
 }

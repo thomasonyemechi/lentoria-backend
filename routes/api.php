@@ -16,22 +16,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/user_login', [AuthController::class , 'login']);
-Route::post('/user_signup', [AuthController::class , 'signup']);
+Route::post('/user_login', [AuthController::class, 'login']);
+Route::post('/user_signup', [AuthController::class, 'signup']);
 
 
 
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
 
-    Route::get('/checklogged', [AuthController::class , 'log2']);
+    // category routes
+    Route::post('/add_category', [CategoryController::class, 'create']);
+    Route::get('category/{id}', [CategoryController::class, 'edit']);
+    Route::post('/category/{id}', [CategoryController::class, 'update']);
+    Route::post('/category', [CategoryController::class, 'fetchCategory']);
+    Route::post('/status', [CategoryController::class, 'status']);
 
-    Route::post('/add_category', [CategoryController::class , 'create']);
-    Route::get('category/{id}', [CategoryController::class , 'edit']);
-
-
-    Route::post('/category/{id}', [CategoryController::class , 'update']);
-
-Route::post('/status', [CategoryController::class , 'status']);
 
 });
