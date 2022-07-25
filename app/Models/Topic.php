@@ -10,7 +10,7 @@ class Topic extends Model
     use HasFactory;
 
     protected $guarded = [];
-    public function categories()
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }
