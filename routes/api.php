@@ -23,6 +23,7 @@ Route::post('/user_signup', [AuthController::class, 'signup']);
 
 
 
+
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
 
     // category routes
@@ -32,4 +33,5 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::post('/category', [CategoryController::class, 'fetchCategory']);
     Route::post('/status', [CategoryController::class, 'status']);
     Route::post('add_topic', [TopicController::class, 'createTopic']);
+
 });

@@ -12,9 +12,7 @@ class CategoryController extends Controller
     {
         $category = new Category();
 
-        $validated = Validator::make($request->all(), [
-            'name' => 'required',
-        ]);
+        $validated = Validator::make($request->all(), ['name' => 'required',]);
 
         if ($validated->fails()) { return response(['errors' => $validated->errors()->all()], 422); }
         $category->name = $request->input('name');
@@ -28,9 +26,7 @@ class CategoryController extends Controller
             'name' => $request->name
         ]);
 
-        return response([
-            'message' => 'Category has been updated sucesfully',
-        ]);
+        return response(['message' => 'Category has been updated sucesfully',]);
 
     }
 
@@ -47,8 +43,6 @@ class CategoryController extends Controller
 
     function fetchCategory()
     {
-        return response([
-            'data' => Category::get()
-        ]);
+        return response(['data' => Category::get()]);
     }
 }
