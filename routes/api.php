@@ -16,16 +16,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+<<<<<<< HEAD
 Route::get('/testing', [AuthController::class, 'createUser']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/add_category', [CategoryController::class , 'create']);
 Route::get('/category/{$id}', [CategoryController::class , 'edit']);
+=======
+Route::post('/user_login', [AuthController::class, 'login']);
+Route::post('/user_signup', [AuthController::class, 'signup']);
+>>>>>>> 1d051626b911bb5c2924afcb198e40ce64c74620
 
 
 
 
 
-Route::group(['middleware' => ['auth:api'] ], function (){
+
+
+Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth:api'] ], function (){
 
     Route::get('/checklogged', [AuthController::class, 'log2']);
 
