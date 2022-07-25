@@ -32,4 +32,16 @@ class CategoryController extends Controller
 
         return response($category, 200);
     }
+
+    function update(Request $request, $id)
+    {
+
+        $category = Category::find($id);
+
+        $category->name = $request->input('name');
+        $category->save();
+
+        return response($category, 200);
+
+    }
 }

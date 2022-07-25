@@ -19,10 +19,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/testing', [AuthController::class, 'createUser']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/add_category', [CategoryController::class , 'create']);
-Route::get('/category/{$id}', [CategoryController::class , 'edit']);
+Route::get('category/{id}', [CategoryController::class , 'edit']);
 Route::post('/user_login', [AuthController::class, 'login']);
 Route::post('/user_signup', [AuthController::class , 'signup']);
-
+Route::post('/category/{id}', [CategoryController::class , 'update']);
 
 
 
