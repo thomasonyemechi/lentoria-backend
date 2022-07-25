@@ -15,8 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/testing', [AuthController::class, 'createUser']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/user_login', [AuthController::class, 'login']);
+Route::post('/user_signup', [AuthController::class, 'signup']);
+
+
 
 
 
