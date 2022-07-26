@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\InstructorController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\TopicController;
@@ -44,7 +45,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('/topic/{id}', [TopicController::class, 'getTopic']);
     Route::get('/topics', [TopicController::class, 'getTopics']);
 
+
+
     //Course routes
 
+    Route::post('/create_new_course', [CourseController::class, 'createCourse']);
     Route::post('/course_update', [CourseController::class, 'courseUpdate']);
+
 });
