@@ -19,12 +19,12 @@ return new class extends Migration
             $table->integer('topic_id');
             $table->integer('user_id');
             $table->string('title');
-            $table->string('subtitle');
-            $table->text('description');
-            $table->text('language');
-            $table->string('image');
-            $table->string('video');
-            $table->integer('level');
+            $table->string('subtitle')->nullable();
+            $table->text('description')->nullable();
+            $table->text('language')->nullable();
+            $table->string('image')->nullable();
+            $table->string('video')->nullable();
+            $table->integer('level')->nullable();
             $table->integer('course_type');
             $table->timestamps();
         });
