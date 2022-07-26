@@ -28,9 +28,7 @@ class CategoryController extends Controller
             'name' => $request->name
         ]);
 
-        return response([
-            'message' => 'Category has been updated sucesfully',
-        ]);
+        return response(['message' => 'Category has been updated sucesfully',]);
 
     }
 
@@ -47,8 +45,11 @@ class CategoryController extends Controller
 
     function fetchCategory()
     {
-        return response([
-            'data' => Category::get()
-        ]);
+        return response(['data' => Category::get()]);
+    }
+
+    function fetchSingleCategory($id){
+      $category=  Category::with(['topics'])->find($id);
+        return response(['data' => $category],200);
     }
 }
