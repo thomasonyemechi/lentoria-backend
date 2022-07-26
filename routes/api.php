@@ -6,6 +6,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\InstructorController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\CourseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,9 +49,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
 
 
 
+    //Course routes
 
-    /////courses
     Route::post('/create_new_course', [CourseController::class, 'createCourse']);
-
+    Route::post('/course_update', [CourseController::class, 'courseUpdate']);
 
 });
