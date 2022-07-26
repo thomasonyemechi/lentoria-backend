@@ -19,10 +19,11 @@ class InstructorController extends Controller
         if ($validated->fails()) { return response(['errors' => $validated->errors()->all()], 422); }
         $user = User::find($request->id);
         $user->update([
-            'role' => 5
+            'role' => 5,
         ]);
 
-        Instructor::updateOrCreate(['user_id' => $user->id]);
+        Instructor::updateOrCreate(['user_id' => $user->id],
+        [ 'biography' => ' e' ]);
 
         return response([
             'message' => 'You have become an instructor, follow guidlines to create course'
@@ -40,7 +41,14 @@ class InstructorController extends Controller
 
         $user = User::find($request->id);
         $user->instructor->update([
-            'bio' => $request->bio
+            'headline' => $request->headline,
+            'biography' => $request->biography,
+            'language' => $request->language,
+            'website_url' => $request->website_url,
+            'twitter' => $request->twitter,
+            'facebook' => $request->facebook,
+            'linkedin' => $request->linkedin,
+            'youtube' => $request->youtube
         ]);
 
         return response([
@@ -58,9 +66,9 @@ class InstructorController extends Controller
     }
 
 
-    function fetchSingleInstructor($id)
+    function fetchSingleInstructor()
     {
-        $user = User::with(['instructor'])->get();
+        $user = User::with(['instructor'])->where('id', auth()->user()->id)->first();
         return response([
             'data' => $user
         ], 200);

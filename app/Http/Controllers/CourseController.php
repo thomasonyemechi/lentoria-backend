@@ -118,20 +118,20 @@ class CourseController extends Controller
     {
         $val = Validator::make($request->all(), [
             'course_id' => 'required|exists:courses,id',
-            'what_you_will_learn' => 'required|array',
-            'course_requirement' => 'required|array',
-            'course_audience' => 'required|array',
+            'what_you_will_learn' => 'required|',
+            'course_requirement' => 'required|',
+            'course_audience' => 'required|',
         ]);
 
         if ($val->fails()) { return response(['errors' => $val->errors()->all()], 422); }
 
-        $course = Course::find($request->id);
+        $course = Course::find($request->course_id);
 
-        $course->info->update([
+        CourseInfo::updateOrCreate(['course_id' => $course->id],[
             'what_you_will_learn' => json_encode($request->what_you_will_learn),
             'course_requirement' => json_encode($request->course_requirement),
             'course_audience' => json_encode($request->course_audience),
-            'purpose' => json_encode($request->purpose),
+            'purpose' => $request->purpose,
         ]);
 
         return response([
