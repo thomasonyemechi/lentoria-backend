@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\InstructorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::post('/category/{id}', [CategoryController::class, 'update']);
     Route::post('/category', [CategoryController::class, 'fetchCategory']);
     Route::post('/status', [CategoryController::class, 'status']);
+
+
+    // Instructor fetch
+    Route::post('/become_instructor', [InstructorController::class, 'becomeInstructor']);
+    Route::post('/update_instructor_profile', [InstructorController::class, 'updateInstructorProfile']);
+    Route::get('/fetch_all_instructor', [InstructorController::class, 'fetchAllInstructor']);
+    Route::get('/fetch_single_instructor', [InstructorController::class, 'fetchSingleInstructor']);
+
 
 
 });
