@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class CourseOwner extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+    public function course(){
+        return $this->belongsTo(Course::class);
+    }
 }

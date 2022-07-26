@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class CourseInfo extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['course_id','what_you_will_learn','course_requirement','course_audience','purpose'];
+    public function course(){
+        return $this->belongsTo(Course::class);
+    }
 }
