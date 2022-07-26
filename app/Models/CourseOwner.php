@@ -9,7 +9,10 @@ class CourseOwner extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'user_id', 'course_id', 'status', 'role'
+    ];
+
     public function course(){
         return $this->belongsTo(Course::class);
     }
