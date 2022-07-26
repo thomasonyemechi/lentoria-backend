@@ -6,7 +6,6 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\InstructorController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\TopicController;
-use App\Http\Controllers\CourseController;
 use Illuminate\Support\Facades\Route;
 
 /*
