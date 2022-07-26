@@ -4,8 +4,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\InstructorController;
+use App\Http\Controllers\SectionController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\TopicController;
+use App\Models\Section;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,5 +52,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
 
     Route::post('/create_new_course', [CourseController::class, 'createCourse']);
     Route::post('/course_update', [CourseController::class, 'courseUpdate']);
+
+
+    //Section routes
+
+    Route::post('add_section',[SectionController::class, 'createSection']);
+    Route::post('update_section', [SectionController::class, 'updateSection']);
+    Route::get('get_all_sections',[SectionController::class, 'getSections']);
+    Route::get('get_single_section/{id}',[SectionController::class, 'getSection']);
+    Route::get('sections_lectures',[SectionController::class, 'getSectionWithLectures']);
 
 });
