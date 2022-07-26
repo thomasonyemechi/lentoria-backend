@@ -10,7 +10,7 @@ class Instructor extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'bio', 'status'
+        'user_id', 'biography', 'status', 'headline','biography','language','website_url','twitter','facebook','linkedin','youtube'
     ];
 
 
