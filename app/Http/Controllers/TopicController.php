@@ -50,5 +50,4 @@ class TopicController extends Controller
 
 
 
-
 }

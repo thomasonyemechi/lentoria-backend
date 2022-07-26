@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -15,17 +16,18 @@ class SectionController extends Controller
             'gain'=>'required|string',
         ]);
         if($validation->fails()){return response(['errors' => $validation->errors()->all()], 422);}
-
+        $total_section = Section::where(['course_id' => $request->course_id])->count() + 1;
         Section::create([
             'course_id'=>$request->course_id,
             'title'=>$request->title,
             'course_gain'=>$request->gain,
+            'order' => $total_section
         ]);
         return response(['message' => 'Section created successfully'],200);
     }
 
-    public function getSections(){
-        return response(['data'=>Section::all()],200);
+    public function getSections($course_id){
+        return response(['data'=>Section::where('course_id', $course_id)->orderby('order', 'ASC')->get()],200);
     }
 
     public function getSection($id){
@@ -45,7 +47,6 @@ class SectionController extends Controller
             'course_id'=>'required|exists:courses,id',
             'title'=>'required|string|max:100',
             'gain'=>'required|string',
-
         ]);
         if($validation->fails()){return response(['errors'=>$validation->errors()->all()],422);}
         Section::find($request->id)->update([
@@ -55,5 +56,37 @@ class SectionController extends Controller
         ]);
 
         return response(['message' => 'Section has been updated successfully'],200);
+    }
+
+
+    function orderSection(Request $request)
+    {
+        $val = Validator::make($request->all(), [
+            'id' => 'required|exists:sections,id',
+            'action' => 'required'
+        ]);
+        if ($val->fails()) { return response(['errors' => $val->errors()->all()], 422); }
+        $section = Section::find($request->id); $action = $request->action; $current_section_order = $section->order;
+
+        $before_current = ($action == 'up') ? Section::where(['course_id' => $section->course_id, ['order', '<', $section->order] ])->orderBy('order', 'desc')->first():
+            Section::where(['course_id' => $section->course_id, ['order', '>', $section->order] ])->orderBy('order', 'asc')->first();
+
+        if(!$before_current){
+            return response([
+                'message' => 'This item cannot be ordered'
+            ], 422);
+        }
+
+        $section->update([
+            'order' => $before_current->order
+        ]);
+
+        $before_current->update([
+            'order' => $current_section_order
+        ]);
+
+        return response([
+            'message' => 'Section has be ordered sucessfully'
+        ], 200);
     }
 }

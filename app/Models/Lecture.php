@@ -13,4 +13,8 @@ class Lecture extends Model
     public function materials(){
         return $this->hasMany(Material::class);
     }
+
+    protected $fillable = [
+        'section_id','title','description','main_content', 'order'
+    ];
 }
