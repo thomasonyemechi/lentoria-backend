@@ -24,21 +24,31 @@ class TopicController extends Controller
         return response(['message' => 'Topic added successfully'], 200);
     }
 
+    public function getTopic($id){
+        $topic = Topic::find($id);
+
+        return response(['data'=>$topic],200);
+    }
+
     public function getTopics()
     {
-        $topics = Topic::get()->load(['category']);
+        $topics = Topic::with(['category:id,name'])->get();
 
         return response(['data' => $topics], 200);
     }
 
-    function update(Request $request)
+    public function updateTopic(Request $request,$id)
     {
-        Topic::where('id', $request->id)->update([
+        Topic::where('id', $id)->update([
             'name' => $request->name,
             'description' => $request->description,
+            'category_id'=> $request->category_id,
         ]);
-        return response(['message' => 'Category has been updated sucesfully',],200);
+        return response(['message' => 'Topic has been updated sucesfully',],200);
 
     }
+
+
+
 
 }

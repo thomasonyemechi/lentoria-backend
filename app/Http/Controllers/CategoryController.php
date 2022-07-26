@@ -45,4 +45,9 @@ class CategoryController extends Controller
     {
         return response(['data' => Category::get()]);
     }
+
+    function fetchSingleCategory($id){
+      $category=  Category::with(['topics'])->find($id);
+        return response(['data' => $category],200);
+    }
 }
