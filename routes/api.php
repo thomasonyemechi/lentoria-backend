@@ -37,8 +37,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('/fetch_all_instructor', [InstructorController::class, 'fetchAllInstructor']);
     Route::get('/fetch_single_instructor', [InstructorController::class, 'fetchSingleInstructor']);
 
-
-
     Route::get('/fetchcategory/{id}', [CategoryController::class, 'fetchSingleCategory']);
     // Topic routes
     Route::post('/add_topic', [TopicController::class, 'createTopic']);
