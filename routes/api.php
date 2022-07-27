@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnnoucementController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CourseController;
@@ -84,5 +85,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('get_material/{id}',[MaterialController::class, 'getMaterial']);
     Route::post('update_material', [MaterialController::class, 'updateMaterial']);
 
-
+    //annoucements
+    Route::post('add_announcement', [AnnoucementController::class, 'createAnnouncement']);
+    Route::get('get_announcements/{id}', [AnnoucementController::class, 'getAnnouncements']);
 });

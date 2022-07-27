@@ -18,14 +18,13 @@ class MaterialController extends Controller
         'file' => 'required_if:type,==,1|mimes:zip,pdf,mp4,mpeg',
     ]);
 
-        if ($validated->fails()) {
-            return response(['errors' => $validated->errors()->all()], 422);
-        }
-        if ($request->file()) {
+        if ($validated->fails()) {return response(['errors' => $validated->errors()->all()], 422);}
+
+        if ($request->file('file')) {
             $file = $request->file('file');
             $fileName = $file->hashName();
             $destinationPath = public_path().'/assets/uploads/';
-            $file->move($destinationPath, $fileName);
+            $file->move($destinationPath,$fileName);
         }
         Material::create([
         'lecture_id' => $request->lecture_id,
@@ -80,12 +79,12 @@ class MaterialController extends Controller
             $file = $request->file('file');
             $fileName = $file->hashName();
             $destinationPath = public_path().'/assets/uploads/';
-            // if (file_exists($destinationPath.$old->file_name)) {
-            //     unlink($destinationPath.$old->file_name);
-            // }
-            $file->move($destinationPath, $fileName);
+            if ($old->file_name != '' && file_exists($destinationPath.$old->file_name)) {
+                unlink($destinationPath.$old->file_name);
+            }
+            $file->move($destinationPath,$fileName);
         }
-        Material::where('id',$request->id)->update([
+        Material::where('id', $request->id)->update([
             'lecture_id' => $request->lecture_id,
             'title' => $request->title,
             'type' => $request->type,

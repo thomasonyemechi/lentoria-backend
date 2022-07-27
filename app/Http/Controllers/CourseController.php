@@ -34,7 +34,7 @@ class CourseController extends Controller
             $file = $request->file('image') ;
             $imageName = $file->hashName() ;
             $destinationPath = public_path().'/assets/uploads/' ;
-            if(file_exists($destinationPath.$old->image)){
+            if($old->image != "" && file_exists($destinationPath.$old->image)){
                 unlink($destinationPath.$old->image);
             }
             $file->move($destinationPath,$imageName);
@@ -42,7 +42,7 @@ class CourseController extends Controller
             $file2 = $request->file('video');
             $videoName = $file2->hashName();
             $destinationPath = public_path().'/assets/uploads/';
-            if(file_exists($destinationPath.$old->video)){
+            if($old->image != "" && file_exists($destinationPath.$old->video)){
                 unlink($destinationPath.$old->video);
             }
             $file2->move($destinationPath,$videoName);
