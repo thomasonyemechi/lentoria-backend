@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\LectureController;
+use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\SectionController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\TopicController;
@@ -76,6 +77,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('fetch_lectures/{section_id}',[LectureController::class, 'fetchLectures']);
     Route::post('order_lecture',[LectureController::class, 'orderLecture']);
 
+    //materials
+
+    Route::post('add_materials',[MaterialController::class, 'createMaterial']);
+    Route::get('get_materials/{lecture_id}',[MaterialController::class, 'getMaterials']);
+    Route::get('get_material/{id}',[MaterialController::class, 'getMaterial']);
+    Route::post('update_material', [MaterialController::class, 'updateMaterial']);
 
 
 });
