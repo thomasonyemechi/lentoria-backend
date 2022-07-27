@@ -18,13 +18,15 @@ class MaterialController extends Controller
         'file' => 'required_if:type,==,1|mimes:zip,pdf,mp4,mpeg',
     ]);
 
-        if ($validated->fails()) {return response(['errors' => $validated->errors()->all()], 422);}
-
+        if ($validated->fails()) {
+            return response(['errors' => $validated->errors()->all()], 422);
+        }
+        $fileName = null;
         if ($request->file('file')) {
             $file = $request->file('file');
             $fileName = $file->hashName();
             $destinationPath = public_path().'/assets/uploads/';
-            $file->move($destinationPath,$fileName);
+            $file->move($destinationPath, $fileName);
         }
         Material::create([
         'lecture_id' => $request->lecture_id,
@@ -64,6 +66,7 @@ class MaterialController extends Controller
     public function updateMaterial(Request $request)
     {
         $validated = Validator::make($request->all(), [
+            'id' => 'required|exists:materials,id',
             'lecture_id' => 'required|exists:lectures,id',
             'title' => 'required|string|max:100',
             'type' => 'required',
@@ -75,14 +78,15 @@ class MaterialController extends Controller
             return response(['errors' => $validated->errors()->all()], 422);
         }
         $old = Material::find($request->id);
+        $fileName = null;
         if ($request->file()) {
             $file = $request->file('file');
             $fileName = $file->hashName();
             $destinationPath = public_path().'/assets/uploads/';
-            if ($old->file_name != '' && file_exists($destinationPath.$old->file_name)) {
+            if ($old->file_name != null && file_exists($destinationPath.$old->file_name)) {
                 unlink($destinationPath.$old->file_name);
             }
-            $file->move($destinationPath,$fileName);
+            $file->move($destinationPath, $fileName);
         }
         Material::where('id', $request->id)->update([
             'lecture_id' => $request->lecture_id,
