@@ -9,7 +9,7 @@ use App\Models\Lecture;
 class Material extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'link', 'type', 'scripts', 'lecture_id'];
+    protected $fillable = ['title', 'link', 'type', 'scripts', 'lecture_id', 'file_name'];
 
     // public function getAttribute($key)
     // {
