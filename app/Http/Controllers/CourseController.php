@@ -23,7 +23,7 @@ class CourseController extends Controller
             'category_id'=>'required|exists:categories,id',
             'type'=>'required',
             'topic_id'=>'required|exists:topics,id',
-            'image'=>'mimes:jpeg,jpg,png,gif',
+            'image'=>'image|mimes:jpeg,jpg,png,gif',
             'video'=>'mimes:avi,mpeg,mp4',
         ]);
         if($validated->fails()){return response(['error' => $validated->errors()->all()], 422);}
