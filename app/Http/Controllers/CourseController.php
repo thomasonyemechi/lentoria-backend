@@ -29,8 +29,9 @@ class CourseController extends Controller
         if($validated->fails()){return response(['error' => $validated->errors()->all()], 422);}
 
 
-        if($request->file()){
+        if($request->hasFile('image') && $request->hasFile('video')){
             $old = Course::find($request->id);
+
             $file = $request->file('image') ;
             $imageName = $file->hashName() ;
             $destinationPath = public_path().'/assets/uploads/' ;
@@ -42,7 +43,7 @@ class CourseController extends Controller
             $file2 = $request->file('video');
             $videoName = $file2->hashName();
             $destinationPath = public_path().'/assets/uploads/';
-            if($old->image != "" && file_exists($destinationPath.$old->video)){
+            if($old->video != "" && file_exists($destinationPath.$old->video)){
                 unlink($destinationPath.$old->video);
             }
             $file2->move($destinationPath,$videoName);
@@ -98,18 +99,15 @@ class CourseController extends Controller
             'course_id' => $course->id
         ]);
 
-        return response([
-            'message' => 'Course has been created scuessfully'
-        ], 200);
+        return response(['message' => 'Course has been created successfully'], 200);
     }
 
 
     function fetchMyCourse()
     {
-        $data = User::with(['courses'])->find(auth()->user()->id);
-        return response([
-            'data' => $data
-        ], 200);
+        // $data = User::with(['courses'])->find(auth()->user()->id);
+        $data = Course::user()->get();
+        return response(['data' => $data], 200);
     }
 
 

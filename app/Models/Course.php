@@ -28,4 +28,8 @@ class Course extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    function scopeUser($query){
+        return $query->where('user_id',auth()->user()->id);
+    }
 }
