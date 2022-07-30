@@ -10,6 +10,7 @@ use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\SectionController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\WishlistController;
 use App\Models\Section;
 use Illuminate\Support\Facades\Route;
 
@@ -88,4 +89,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     //annoucements
     Route::post('add_announcement', [AnnoucementController::class, 'createAnnouncement']);
     Route::get('get_announcements/{id}', [AnnoucementController::class, 'getAnnouncements']);
+
+    //Wishlist
+    Route::post('add_to_wishlist',[WishlistController::class,'addToWishlist']);
+    Route::get('my_wishlist', [WishlistController::class, 'userWishList']);
+    Route::post('delete_from_wishlist', [WishlistController::class, 'deleteFromWishlist']);
 });

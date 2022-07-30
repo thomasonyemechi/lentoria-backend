@@ -32,4 +32,8 @@ class Course extends Model
     function scopeUser($query){
         return $query->where('user_id',auth()->user()->id);
     }
+
+    function wishlist(){
+        return $this->hasMany(Wishlist::class);
+    }
 }
