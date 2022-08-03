@@ -76,10 +76,10 @@ class CourseController extends Controller
         ]);
 
         if ($val->fails()) { return response(['errors' => $val->errors()->all()], 422); }
-
+        $slug = rand(111111,9999999).Str::slug($request->title);
         $course = Course::create([
             'user_id' => auth()->user()->id,
-            'slug' => rand(111111,9999999).Str::slug($request->title),
+            'slug' => $slug,
             'title' => $request->title,
             'subtitle' => $request->subtitle,
             'course_type' => $request->course_type,
@@ -99,7 +99,7 @@ class CourseController extends Controller
             'course_id' => $course->id
         ]);
 
-        return response(['message' => 'Course has been created successfully'], 200);
+        return response(['message' => 'Course has been created successfully', 'slug' => $slug], 200);
     }
 
 
