@@ -49,6 +49,14 @@ class TopicController extends Controller
 
     public function updateTopic(Request $request,$id)
     {
+        $validation = Validator::make($request->all(), [
+            'name' => 'required|unique:topics,name',
+            'description' => 'required',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+        if ($validation->fails()) {
+            return response(['errors' => $validation->errors()->all()], 422);
+        }
         Topic::where('id', $id)->update([
             'name' => $request->name,
             'description' => $request->description,
