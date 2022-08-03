@@ -7,9 +7,11 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\LectureController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SectionController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WishlistController;
 use App\Models\Section;
 use Illuminate\Support\Facades\Route;
@@ -94,4 +96,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::post('add_to_wishlist',[WishlistController::class,'addToWishlist']);
     Route::get('my_wishlist', [WishlistController::class, 'userWishList']);
     Route::post('delete_from_wishlist', [WishlistController::class, 'deleteFromWishlist']);
+
+    //Search
+    Route::get('search_courses',[SearchController::class, 'searchCourses']);
+
+    //BuyCourse
+
+    Route::post('buy_course',[TransactionController::class,'buyCourse']);
 });
