@@ -73,6 +73,7 @@ class CourseController extends Controller
             'subtitle' => 'required|string|max:100',
             'course_type' => 'required',
             'category_id' => 'required|exists:categories,id',
+            'topic_id'=>'required|exists:topics,id'
         ]);
 
         if ($val->fails()) { return response(['errors' => $val->errors()->all()], 422); }
