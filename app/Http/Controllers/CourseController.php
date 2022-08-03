@@ -103,6 +103,15 @@ class CourseController extends Controller
     }
 
 
+
+    function FetchCourse($slug)
+    {
+        return response(['data' => Course::with('category')->where('slug',$slug)->get() ]);
+    }
+
+
+
+
     function fetchMyCourse()
     {
         // $data = User::with(['courses'])->find(auth()->user()->id);
