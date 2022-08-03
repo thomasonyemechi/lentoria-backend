@@ -62,7 +62,7 @@ class TopicController extends Controller
             'description' => $request->description,
             'category_id'=> $request->category_id,
         ]);
-        return response(['message' => 'Topic has been updated sucesfully',],200);
+        return response(['message' => 'Topic has been updated wsevefefefwef sucesfully',],200);
 
     }
 
