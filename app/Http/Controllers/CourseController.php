@@ -105,9 +105,9 @@ class CourseController extends Controller
 
 
 
-    function FetchCourse($slug)
+    function fetchCourse($slug)
     {
-        return response(['data' => Course::with('category')->where('slug',$slug)->get() ]);
+        return response(['data' => Course::where('slug',$slug)->firstorfail() ]);
     }
 
     function fetchCourseLearners($slug)
