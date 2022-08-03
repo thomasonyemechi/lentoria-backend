@@ -43,12 +43,20 @@ class TopicController extends Controller
 
     public function updateTopic(Request $request,$id)
     {
+        $validation = Validator::make($request->all(), [
+            'name' => 'required',
+            'description' => 'required',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+        if ($validation->fails()) {
+            return response(['errors' => $validation->errors()->all()], 422);
+        }
         Topic::where('id', $id)->update([
             'name' => $request->name,
             'description' => $request->description,
             'category_id'=> $request->category_id,
         ]);
-        return response(['message' => 'Topic has been updated sucesfully',],200);
+        return response(['message' => 'Topic has been updated wsevefefefwef sucesfully',],200);
 
     }
 
