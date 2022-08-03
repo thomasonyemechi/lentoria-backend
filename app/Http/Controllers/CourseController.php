@@ -110,6 +110,11 @@ class CourseController extends Controller
         return response(['data' => Course::with('category')->where('slug',$slug)->get() ]);
     }
 
+    function fetchCourseLearners($slug)
+    {
+        return response(['data' => Course::with('category')->where('slug',$slug)->get() ]);
+    }
+
 
 
 

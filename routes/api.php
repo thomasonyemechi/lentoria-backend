@@ -61,6 +61,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::post('/course_update', [CourseController::class, 'courseUpdate']);
     Route::post('/course_update_info', [CourseController::class, 'courseInfoUpdate']);
     Route::get('/fetch_my_course', [CourseController::class, 'fetchMyCourse']);
+    Route::get('/course/landing_info/{slug}', [CourseController::class, 'fetchCourse']);
+    Route::get('/course/intended_learners/{slug}', [CourseController::class, 'fetchCourseLearners']);
     Route::get('/course/{slug}', [CourseController::class, 'fetchCourse']);
 
 
