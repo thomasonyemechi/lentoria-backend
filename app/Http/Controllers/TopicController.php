@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -32,7 +33,10 @@ class TopicController extends Controller
 
     public function getTopics()
     {
-        $topics = Topic::with(['category:id,name'])->get();
+        $topics = Topic::with(['category:id,name'])->orderBy('id', 'desc')->get();
+        foreach($topics as $key =>$topic) {
+            $topics[$key]['total_courses'] = Course::where('topic_id', $topic->id)->count();
+        }
 
         return response(['data' => $topics], 200);
     }
