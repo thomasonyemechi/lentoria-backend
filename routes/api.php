@@ -51,6 +51,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::post('/update_topic/{id}', [TopicController::class, 'updateTopic']);
     Route::get('/topic/{id}', [TopicController::class, 'getTopic']);
     Route::get('/topics', [TopicController::class, 'getTopics']);
+    Route::get('/topics/{id}', [TopicController::class, 'getTopicsByCategory']);
 
 
 

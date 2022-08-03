@@ -11,7 +11,7 @@ class TopicController extends Controller
     public function createTopic(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|unique:topics,name',
             'description' => 'required',
             'category_id' => 'required|exists:categories,id',
         ]);
@@ -35,6 +35,12 @@ class TopicController extends Controller
         $topics = Topic::with(['category:id,name'])->get();
 
         return response(['data' => $topics], 200);
+    }
+
+    public function getTopicsByCategory($cat_id){
+        $topics = Topic::where('category_id',$cat_id)->get();
+        return response(['data' => $topics], 200);
+
     }
 
     public function updateTopic(Request $request,$id)
