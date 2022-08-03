@@ -25,6 +25,12 @@ class CategoryController extends Controller
 
     function update(Request $request)
     {
+        $validated = Validator::make($request->all(), [
+            'name' => 'required|unique:categories,name',
+        ]);
+
+        if ($validated->fails()) { return response(['errors' => $validated->errors()->all()], 422); }
+        
         Category::where('id', $request->id)->update([
             'name' => $request->name
         ]);
