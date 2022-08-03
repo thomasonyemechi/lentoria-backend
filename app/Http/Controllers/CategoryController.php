@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Topic;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
@@ -13,13 +14,13 @@ class CategoryController extends Controller
         $category = new Category();
 
         $validated = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|unique:categories,name',
         ]);
 
         if ($validated->fails()) { return response(['errors' => $validated->errors()->all()], 422); }
         $category->name = $request->input('name');
         $category->save();
-        return response(['success' => 'Category Added'], 200);
+        return response(['message' => 'Category Added'], 200);
     }
 
     function update(Request $request)
@@ -45,7 +46,11 @@ class CategoryController extends Controller
 
     function fetchCategory()
     {
-        return response(['data' => Category::get()]);
+        $data = Category::orderby('id', 'desc')->get();
+        foreach($data as $key => $cat){
+            $data[$key]['total_topics'] = Topic::where('category_id', $cat->id)->count();
+        }
+        return response(['data' => $data]);
     }
 
     function fetchSingleCategory($id){
