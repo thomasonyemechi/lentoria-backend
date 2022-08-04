@@ -29,10 +29,8 @@ class CourseController extends Controller
         if ($validated->fails()) {
             return response(['error' => $validated->errors()->all()], 422);
         }
-
-        if ($request->hasFile('image') && $request->hasFile('video')) {
-            $old = Course::find($request->id);
-
+        $old = Course::find($request->id);
+        if ($request->file('image')) {
             $file = $request->file('image');
             $imageName = $file->hashName();
             $destinationPath = public_path().'/assets/uploads/';
@@ -40,7 +38,8 @@ class CourseController extends Controller
                 unlink($destinationPath.$old->image);
             }
             $file->move($destinationPath, $imageName);
-
+        }
+        if ($request->file('video')) {
             $file2 = $request->file('video');
             $videoName = $file2->hashName();
             $destinationPath = public_path().'/assets/uploads/';
@@ -59,8 +58,8 @@ class CourseController extends Controller
             'category_id' => $request->category_id,
             'topic_id' => $request->topic_id,
             'course_type' => $request->course_type,
-            'image' => $imageName,
-            'video' => $videoName,
+            'image' => $imageName ?? '',
+            'video' => $videoName ?? '',
         ]);
 
         return response(['message' => 'Update Successful'], 200);
@@ -116,7 +115,8 @@ class CourseController extends Controller
             'welcome_message' => $request->welcome_message,
             'certification_message' => $request->certification_message,
         ]);
-        return response(['message'=>'Course Message Added'], 200);
+
+        return response(['message' => 'Course Message Added'], 200);
     }
 
     public function fetchCourse($slug)
