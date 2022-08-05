@@ -86,6 +86,7 @@ class CourseController extends Controller
             'subtitle' => $request->subtitle,
             'course_type' => $request->course_type,
             'category_id' => $request->category_id,
+            'topic_id' => $request->topic_id,
         ]);
 
         CourseOwner::create([
