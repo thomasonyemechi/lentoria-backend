@@ -137,6 +137,26 @@ class CourseController extends Controller
         return response(['data' => $data], 200);
     }
 
+
+    function updatePricing(Request $request)
+    {
+        $validated = Validator::make($request->all(), [
+            'course_id' => 'required|exists:courses,id',
+            'price' => 'required',
+        ]);
+        if ($validated->fails()) {
+            return response(['error' => $validated->errors()->all()], 422);
+        }
+        $course = Course::find($request->course_id);
+        $course->update([
+            'currency' => $request->currency,
+            'price' => $request->price
+        ]);
+        return response([
+            'message' => 'Pricing info has been updaetd sucessfully'
+        ], 200);
+    }
+
     public function courseInfoUpdate(Request $request)
     {
         $val = Validator::make($request->all(), [
