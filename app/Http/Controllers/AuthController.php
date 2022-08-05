@@ -76,10 +76,6 @@ class AuthController extends Controller
             'phone' => $request->phone,
         ]);
 
-
-
-        return response($res);
-
         if (!$res['success']) {
             return response([
                 'message' => $res['message'],
