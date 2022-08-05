@@ -58,8 +58,8 @@ class CourseController extends Controller
             'category_id' => $request->category_id,
             'topic_id' => $request->topic_id,
             'course_type' => $request->course_type,
-            'image' => $imageName ?? '',
-            'video' => $videoName ?? '',
+            'image' => $imageName ?? $old->image,
+            'video' => $videoName ?? $old->video,
         ]);
 
         return response(['message' => 'Update Successful'], 200);
