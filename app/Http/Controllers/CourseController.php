@@ -30,25 +30,25 @@ class CourseController extends Controller
             return response(['error' => $validated->errors()->all()], 422);
         }
 
-        if ($request->hasFile('image') && $request->hasFile('video')) {
-            $old = Course::find($request->id);
+        // if ($request->hasFile('image') && $request->hasFile('video')) {
+        //     $old = Course::find($request->id);
 
-            $file = $request->file('image');
-            $imageName = $file->hashName();
-            $destinationPath = public_path().'/assets/uploads/';
-            if (($old->image != '' || $old->image != null) && file_exists($destinationPath.$old->image)) {
-                unlink($destinationPath.$old->image);
-            }
-            $file->move($destinationPath, $imageName);
+        //     $file = $request->file('image');
+        //     $imageName = $file->hashName();
+        //     $destinationPath = public_path().'/assets/uploads/';
+        //     if (($old->image != '' || $old->image != null) && file_exists($destinationPath.$old->image)) {
+        //         unlink($destinationPath.$old->image);
+        //     }
+        //     $file->move($destinationPath, $imageName);
 
-            $file2 = $request->file('video');
-            $videoName = $file2->hashName();
-            $destinationPath = public_path().'/assets/uploads/';
-            if (($old->video != '' || $old->video != null) && file_exists($destinationPath.$old->video)) {
-                unlink($destinationPath.$old->video);
-            }
-            $file2->move($destinationPath, $videoName);
-        }
+        //     $file2 = $request->file('video');
+        //     $videoName = $file2->hashName();
+        //     $destinationPath = public_path().'/assets/uploads/';
+        //     if (($old->video != '' || $old->video != null) && file_exists($destinationPath.$old->video)) {
+        //         unlink($destinationPath.$old->video);
+        //     }
+        //     $file2->move($destinationPath, $videoName);
+        // }
 
         Course::where('id', $request->id)->update([
             'title' => $request->title,
