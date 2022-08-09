@@ -2,42 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use App\Models\Instructor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-
 class InstructorController extends Controller
 {
-    function becomeInstructor(Request $request)
+    public function becomeInstructor(Request $request)
     {
         $validated = Validator::make($request->all(), [
             'id' => 'required|exists:users,id',
         ]);
 
-        if ($validated->fails()) { return response(['errors' => $validated->errors()->all()], 422); }
+        if ($validated->fails()) {
+            return response(['errors' => $validated->errors()->all()], 422);
+        }
         $user = User::find($request->id);
         $user->update([
             'role' => 5,
         ]);
 
         Instructor::updateOrCreate(['user_id' => $user->id],
-        [ 'biography' => ' e' ]);
+        ['biography' => ' e']);
 
         return response([
-            'message' => 'You have become an instructor, follow guidlines to create course'
+            'message' => 'You have become an instructor, follow guidlines to create course',
         ], 200);
     }
 
-
-    function updateInstructorProfile(Request $request)
+    public function updateInstructorProfile(Request $request)
     {
         $validated = Validator::make($request->all(), [
             'id' => 'required|exists:users,id',
         ]);
 
-        if ($validated->fails()) { return response(['errors' => $validated->errors()->all()], 422); }
+        if ($validated->fails()) {
+            return response(['errors' => $validated->errors()->all()], 422);
+        }
 
         $user = User::find($request->id);
         $user->instructor->update([
@@ -48,29 +51,65 @@ class InstructorController extends Controller
             'twitter' => $request->twitter,
             'facebook' => $request->facebook,
             'linkedin' => $request->linkedin,
-            'youtube' => $request->youtube
+            'youtube' => $request->youtube,
         ]);
 
         return response([
-            'message' => 'Instructor info has been updated sucessfuly'
+            'message' => 'Instructor info has been updated sucessfuly',
         ], 200);
     }
 
-
-    function fetchAllInstructor()
+    public function fetchAllInstructor()
     {
         $instructors = Instructor::with(['user'])->paginate(100);
+
         return response([
-            'data' => $instructors
+            'data' => $instructors,
         ], 200);
     }
 
-
-    function fetchSingleInstructor()
+    public function fetchSingleInstructor()
     {
         $user = User::with(['instructor'])->where('id', auth()->user()->id)->first();
+
         return response([
-            'data' => $user
+            'data' => $user,
         ], 200);
+    }
+
+    public function fetchInstructorByCourseId($id)
+    {
+        $course = Course::findOrFail($id);
+
+        return response([
+            'data' => [
+                'course_info' => collect($course)->forget('user')->all(),
+                'basic_info' => collect($course->user)->forget('instructor')->all(),
+                'instructor' => $course->user->instructor,
+            ],
+            ]);
+    }
+
+    public function fetchInstructorById($id)
+    {
+        $user = User::findOrFail($id);
+        $courses_no = Course::ofGetUser($id)->count();
+
+        return response([
+            'data' => [
+                'basic_info' => collect($user)->forget('instructor')->all(),
+                'instructor_info' => $user->instructor,
+                'no_of_courses'=>$courses_no,
+            ],
+            ]);
+    }
+
+    public function fetchCoursesForInstructor($id)
+    {
+        $courses = Course::ofGetUser($id)->latest()->paginate(25);
+
+        return response([
+        'data' => $courses,
+       ]);
     }
 }

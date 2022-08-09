@@ -14,6 +14,9 @@ class Course extends Model
     ];
 
 
+    function user(){
+        return $this->belongsTo(User::class);
+    }
     function owners()
     {
         return $this->hasMany(CourseOwner::class);
@@ -29,8 +32,8 @@ class Course extends Model
         return $this->belongsTo(User::class);
     }
 
-    function scopeUser($query){
-        return $query->where('user_id',auth()->user()->id);
+    function scopeOfGetUser($query,$type){
+        return $query->where('user_id',$type);
     }
 
     function wishlist(){
