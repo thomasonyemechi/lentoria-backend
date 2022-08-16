@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Category;
 use App\Models\Topic;
+use App\Models\Course;
+use App\Models\Category;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
@@ -63,4 +64,9 @@ class CategoryController extends Controller
       $category=  Category::with(['topics'])->find($id);
         return response(['data' => $category],200);
     }
+    function categories(){
+        $categories = Category::whereHas('courses')->get();
+        return response(['data'=>$categories],200);
+    }
+
 }

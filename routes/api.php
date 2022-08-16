@@ -31,6 +31,9 @@ Route::post('/user_signup', [AuthController::class, 'signup']);
 Route::get('/course_info/{id}',[InstructorController::class, 'fetchInstructorByCourseId']);
 Route::get('/instructor_info/{id}',[InstructorController::class, 'fetchInstructorById']);
 Route::get('/instructor_courses/{id}',[InstructorController::class, 'fetchCoursesForInstructor']);
+Route::get('/category', [CategoryController::class, 'categories']);
+Route::get('/courses', [CourseController::class, 'getCoursesRandomly']);
+Route::get('/courses/{id}', [CourseController::class, 'coursesByCategory']);
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
     // category routes

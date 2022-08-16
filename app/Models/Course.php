@@ -39,4 +39,8 @@ class Course extends Model
     function wishlist(){
         return $this->hasMany(Wishlist::class);
     }
+
+    function category(){
+        return $this->belongsTo(Category::class);
+    }
 }

@@ -15,4 +15,9 @@ class Category extends Model
     {
         return $this->hasMany(Topic::class, 'category_id');
     }
+
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
 }
