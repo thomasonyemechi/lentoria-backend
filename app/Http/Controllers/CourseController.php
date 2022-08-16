@@ -31,6 +31,7 @@ class CourseController extends Controller
         }
         $old = Course::find($request->id);
         if ($request->file('image')) {
+    
             $file = $request->file('image');
             $imageName = $file->hashName();
             $destinationPath = public_path().'/assets/uploads/';
