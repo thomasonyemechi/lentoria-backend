@@ -87,6 +87,7 @@ class CourseController extends Controller
             'subtitle' => $request->subtitle,
             'course_type' => $request->course_type,
             'category_id' => $request->category_id,
+            'topic_id' => $request->topic_id,
         ]);
 
         CourseOwner::create([
@@ -133,7 +134,7 @@ class CourseController extends Controller
     public function fetchMyCourse()
     {
         // $data = User::with(['courses'])->find(auth()->user()->id);
-        $data = Course::user()->paginate(25);
+        $data = Course::ofGetUser(auth()->user()->id)->paginate(25);
 
         return response(['data' => $data], 200);
     }

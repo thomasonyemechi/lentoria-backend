@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WishlistController;
-use App\Models\Section;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +28,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/user_login', [AuthController::class, 'login']);
 Route::post('/user_signup', [AuthController::class, 'signup']);
+Route::get('/course_info/{id}',[InstructorController::class, 'fetchInstructorByCourseId']);
+Route::get('/instructor_info/{id}',[InstructorController::class, 'fetchInstructorById']);
+Route::get('/instructor_courses/{id}',[InstructorController::class, 'fetchCoursesForInstructor']);
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
     // category routes
@@ -68,7 +70,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::post('/update_price', [CourseController::class, 'updatePricing']);
 
 
-    
+
 
     //Section routes
 
