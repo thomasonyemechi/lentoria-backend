@@ -187,4 +187,18 @@ class CourseController extends Controller
             'message' => 'Course info has been updated sucessfully',
         ], 200);
     }
+
+    function coursesByCategory($id){
+        $courses = Course::with('user')->where('category_id',$id)->paginate(25);
+
+        return response(['data'=>$courses],200);
+    }
+
+    function getCoursesRandomly(){
+        $courses = Course::with('user')->get()->random(8);
+
+        return response(['data'=>$courses],200);
+    }
+
+
 }
