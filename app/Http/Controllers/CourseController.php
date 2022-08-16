@@ -168,9 +168,11 @@ class CourseController extends Controller
             'course_audience' => 'required|',
         ]);
 
+
         if ($val->fails()) {
             return response(['errors' => $val->errors()->all()], 422);
         }
+
 
         $course = Course::find($request->course_id);
 
@@ -178,7 +180,7 @@ class CourseController extends Controller
             'what_you_will_learn' => json_encode($request->what_you_will_learn),
             'course_requirement' => json_encode($request->course_requirement),
             'course_audience' => json_encode($request->course_audience),
-            'purpose' => $request->purpose,
+            'purpose' => json_encode($request->purpose),
         ]);
 
         return response([
