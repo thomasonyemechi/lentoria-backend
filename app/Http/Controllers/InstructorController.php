@@ -86,6 +86,7 @@ class InstructorController extends Controller
                 'course_info' => collect($course)->forget('user')->all(),
                 'basic_info' => collect($course->user)->forget('instructor')->all(),
                 'instructor' => $course->user->instructor,
+                'other_info' => $course->info,
             ],
             ]);
     }
@@ -99,7 +100,7 @@ class InstructorController extends Controller
             'data' => [
                 'basic_info' => collect($user)->forget('instructor')->all(),
                 'instructor_info' => $user->instructor,
-                'no_of_courses'=>$courses_no,
+                'no_of_courses' => $courses_no,
             ],
             ]);
     }
