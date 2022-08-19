@@ -35,6 +35,9 @@ Route::get('/instructor_courses/{id}',[InstructorController::class, 'fetchCourse
 Route::get('/category', [CategoryController::class, 'categories']);
 Route::get('/courses', [CourseController::class, 'getCoursesRandomly']);
 Route::get('/courses/{id}', [CourseController::class, 'coursesByCategory']);
+Route::get('get_sections/{course_id}',[SectionController::class, 'getSections']);
+Route::get('fetch_lectures/{section_id}',[LectureController::class, 'fetchLectures']);
+
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
     // category routes

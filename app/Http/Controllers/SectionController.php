@@ -17,13 +17,13 @@ class SectionController extends Controller
         ]);
         if($validation->fails()){return response(['errors' => $validation->errors()->all()], 422);}
         $total_section = Section::where(['course_id' => $request->course_id])->count() + 1;
-        Section::create([
+        $section = Section::create([
             'course_id'=>$request->course_id,
             'title'=>$request->title,
             'course_gain'=>$request->gain,
             'order' => $total_section
         ]);
-        return response(['message' => 'Section created successfully'],200);
+        return response(['message' => 'Section created successfully','id'=>$section->id],200);
     }
 
     public function getSections($course_id){
