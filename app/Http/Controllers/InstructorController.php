@@ -7,30 +7,54 @@ use App\Models\Instructor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
+
 
 class InstructorController extends Controller
 {
-    public function becomeInstructor(Request $request)
+    public function becomeInstructor($id)
     {
-        $validated = Validator::make($request->all(), [
-            'id' => 'required|exists:users,id',
-        ]);
-
-        if ($validated->fails()) {
-            return response(['errors' => $validated->errors()->all()], 422);
-        }
-        $user = User::find($request->id);
+        $user = User::find($id);
         $user->update([
             'role' => 5,
         ]);
-
-        Instructor::updateOrCreate(['user_id' => $user->id],
-        ['biography' => ' e']);
-
-        return response([
-            'message' => 'You have become an instructor, follow guidlines to create course',
-        ], 200);
+        Instructor::updateOrCreate(['user_id' => $user->id]);
     }
+
+
+
+    function becomeInstructor01()
+    {
+        $user = auth()->user();
+        $live_user = $this->fetchLivepetalPlan($user->live_id);
+        if($live_user->active) {
+            $this->becomeInstructor($user->id);
+            return response([
+                'message' => 'You are now an instructor'
+            ], 200);
+        }
+        return response([
+            'message' => 'Please activate a livepetal membership package to become an instructor'
+        ], 402);
+    }
+
+
+    function becomeInstructor02(Request $request)
+    {
+
+    }
+
+
+    function fetchLivepetalPlan($live_id){
+        $res = Http::asForm()->post(env('LINK'), [
+            'live_id' => $live_id,
+            'userPackage' => 34567
+        ]);
+
+        return json_decode($res);
+    }
+
+
 
     public function updateInstructorProfile(Request $request)
     {

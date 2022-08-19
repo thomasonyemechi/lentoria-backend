@@ -4,6 +4,7 @@ use App\Http\Controllers\AnnoucementController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\LectureController;
 use App\Http\Controllers\MaterialController;
@@ -45,7 +46,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
 
 
     // Instructor fetch
-    Route::post('/become_instructor', [InstructorController::class, 'becomeInstructor']);
+    Route::post('/become_instructor', [InstructorController::class, 'becomeInstructor01']);
     Route::post('/update_instructor_profile', [InstructorController::class, 'updateInstructorProfile']);
     Route::get('/fetch_all_instructor', [InstructorController::class, 'fetchAllInstructor']);
     Route::get('/fetch_single_instructor', [InstructorController::class, 'fetchSingleInstructor']);
@@ -114,4 +115,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     //BuyCourse
 
     Route::post('buy_course',[TransactionController::class,'buyCourse']);
+
+
+    ////faq 
+    Route::post('add_faq',[FaqController::class,'addFaq']);
+    Route::post('edit_faq',[FaqController::class,'editFaq']);
+    Route::get('fetch_faq/{course_id}',[FaqController::class,'fetchFaq']);
+    Route::get('plan/{live_id}',[InstructorController::class,'fetchLivepetalPlan']);
+
+    
+
 });
