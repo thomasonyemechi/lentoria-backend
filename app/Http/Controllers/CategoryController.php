@@ -18,7 +18,9 @@ class CategoryController extends Controller
             'name' => 'required|unique:categories,name',
         ]);
 
-        if ($validated->fails()) { return response(['errors' => $validated->errors()->all()], 422); }
+        if ($validated->fails()) {
+            return response(['errors' => $validated->errors()->all()], 422);
+        }
         $category->name = $request->input('name');
         $category->save();
         return response(['message' => 'Category Added'], 200);
@@ -30,14 +32,15 @@ class CategoryController extends Controller
             'name' => 'required|unique:categories,name',
         ]);
 
-        if ($validated->fails()) { return response(['errors' => $validated->errors()->all()], 422); }
+        if ($validated->fails()) {
+            return response(['errors' => $validated->errors()->all()], 422);
+        }
 
         Category::where('id', $request->id)->update([
             'name' => $request->name
         ]);
 
         return response(['message' => 'Category has been updated sucesfully',]);
-
     }
 
     function status(Request $request)
@@ -54,19 +57,26 @@ class CategoryController extends Controller
     function fetchCategory()
     {
         $data = Category::orderby('id', 'desc')->get();
-        foreach($data as $key => $cat){
+        foreach ($data as $key => $cat) {
             $data[$key]['total_topics'] = Topic::where('category_id', $cat->id)->count();
         }
         return response(['data' => $data]);
     }
 
-    function fetchSingleCategory($id){
-      $category=  Category::with(['topics'])->find($id);
-        return response(['data' => $category],200);
-    }
-    function categories(){
-        $categories = Category::whereHas('courses')->get();
-        return response(['data'=>$categories],200);
+    function activeCategories()
+    {
+        $data = Category::where('status', 1)->whereHas('topics')->with('topics')->orderBy('id', 'desc')->get();
+        return response(['data' => $data], 200);
     }
 
+    function fetchSingleCategory($id)
+    {
+        $category =  Category::with(['topics'])->find($id);
+        return response(['data' => $category], 200);
+    }
+    function categories()
+    {
+        $categories = Category::whereHas('courses')->get();
+        return response(['data' => $categories], 200);
+    }
 }
