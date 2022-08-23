@@ -32,7 +32,7 @@ Route::post('/user_signup', [AuthController::class, 'signup']);
 Route::get('/course_info/{id}', [InstructorController::class, 'fetchInstructorByCourseId']);
 Route::get('/instructor_info/{id}', [InstructorController::class, 'fetchInstructorById']);
 Route::get('/instructor_courses/{id}', [InstructorController::class, 'fetchCoursesForInstructor']);
-Route::get('/categories', [CategoryController::class, 'categories']);
+Route::get('/categoriesx', [CategoryController::class, 'categories']);
 Route::get('/courses', [CourseController::class, 'getCoursesRandomly']);
 Route::get('/courses/{id}', [CourseController::class, 'coursesByCategory']);
 Route::get('get_sections/{course_id}', [SectionController::class, 'getSections']);
@@ -98,6 +98,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::post('add_lecture', [LectureController::class, 'addLecture']);
     Route::get('fetch_lectures/{section_id}', [LectureController::class, 'fetchLectures']);
     Route::post('order_lecture', [LectureController::class, 'orderLecture']);
+    Route::post('update_lecture', [LectureController::class, 'updateLecture']);
 
     //materials
 
