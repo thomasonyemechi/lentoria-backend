@@ -32,7 +32,7 @@ Route::post('/user_signup', [AuthController::class, 'signup']);
 Route::get('/course_info/{id}', [InstructorController::class, 'fetchInstructorByCourseId']);
 Route::get('/instructor_info/{id}', [InstructorController::class, 'fetchInstructorById']);
 Route::get('/instructor_courses/{id}', [InstructorController::class, 'fetchCoursesForInstructor']);
-Route::get('/categoriesx', [CategoryController::class, 'categories']);
+Route::get('/categories', [CategoryController::class, 'categories']);
 Route::get('/courses', [CourseController::class, 'getCoursesRandomly']);
 Route::get('/courses/{id}', [CourseController::class, 'coursesByCategory']);
 Route::get('get_sections/{course_id}', [SectionController::class, 'getSections']);
