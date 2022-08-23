@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivationPayment;
 use App\Models\Course;
 use App\Models\Instructor;
 use App\Models\User;
@@ -42,6 +43,40 @@ class InstructorController extends Controller
     function becomeInstructor02(Request $request)
     {
 
+        $validated = Validator::make($request->all(), [
+            'amount' => 'required|integer',
+            'transaction_id' => 'required|integer',
+        ]);
+
+        if ($validated->fails()) {
+            return response(['errors' => $validated->errors()->all()], 422);
+        }
+
+        $user = auth()->user();
+        ActivationPayment::create([
+            'user_id' => $user->id,
+            'transaction_id' => $request->transaction_id,
+            'amount' => $request->amount,
+            'remark' => 'Account Activation Fee'
+        ]);
+
+        $res = Http::asForm()->post(env('LINK'), [
+            'live_id' => $user->live_id,
+            'activateBasicPackage' => 6454,
+        ]);
+
+        $res = json_decode($res);
+
+        if($res->active) {
+            $this->becomeInstructor($user->id);
+            return response([
+                'message' => 'You are now an instructor'
+            ], 200);
+        }
+
+        return response([
+            'message' => $res->message
+        ], 400);
     }
 
 

@@ -50,6 +50,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
 
     // Instructor fetch
     Route::post('/become_instructor', [InstructorController::class, 'becomeInstructor01']);
+    Route::post('/payto_become_instructor', [InstructorController::class, 'becomeInstructor02']);
     Route::post('/update_instructor_profile', [InstructorController::class, 'updateInstructorProfile']);
     Route::get('/fetch_all_instructor', [InstructorController::class, 'fetchAllInstructor']);
     Route::get('/fetch_single_instructor', [InstructorController::class, 'fetchSingleInstructor']);
