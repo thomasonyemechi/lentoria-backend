@@ -38,6 +38,8 @@ Route::get('/courses/{id}', [CourseController::class, 'coursesByCategory']);
 Route::get('get_sections/{course_id}', [SectionController::class, 'getSections']);
 Route::get('fetch_lectures/{section_id}', [LectureController::class, 'fetchLectures']);
 Route::get('/category', [CategoryController::class, 'activeCategories']);
+Route::get('fetch_faq/{course_id}', [FaqController::class, 'fetchFaq']);
+
 
 
 
