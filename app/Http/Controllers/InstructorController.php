@@ -28,7 +28,7 @@ class InstructorController extends Controller
     {
         $user = auth()->user();
         $live_user = $this->fetchLivepetalPlan($user->live_id);
-        if($live_user->active) {
+        if ($live_user->active) {
             $this->becomeInstructor($user->id);
             return response([
                 'message' => 'You are now an instructor'
@@ -67,7 +67,7 @@ class InstructorController extends Controller
 
         $res = json_decode($res);
 
-        if($res->active) {
+        if ($res->active) {
             $this->becomeInstructor($user->id);
             return response([
                 'message' => 'You are now an instructor'
@@ -80,7 +80,8 @@ class InstructorController extends Controller
     }
 
 
-    function fetchLivepetalPlan($live_id){
+    function fetchLivepetalPlan($live_id)
+    {
         $res = Http::asForm()->post(env('LINK'), [
             'live_id' => $live_id,
             'userPackage' => 34567
@@ -147,7 +148,7 @@ class InstructorController extends Controller
                 'instructor' => $course->user->instructor,
                 'other_info' => $course->info,
             ],
-            ]);
+        ]);
     }
 
     public function fetchInstructorById($id)
@@ -161,7 +162,7 @@ class InstructorController extends Controller
                 'instructor_info' => $user->instructor,
                 'no_of_courses' => $courses_no,
             ],
-            ]);
+        ]);
     }
 
     public function fetchCoursesForInstructor($id)
@@ -169,7 +170,13 @@ class InstructorController extends Controller
         $courses = Course::ofGetUser($id)->latest()->paginate(25);
 
         return response([
-        'data' => $courses,
-       ]);
+            'data' => $courses,
+        ]);
+    }
+
+    public function getInstructorProfile()
+    {
+        $instructor = Instructor::where('user_id', auth()->id())->get();
+        return response(['data' => $instructor], 200);
     }
 }

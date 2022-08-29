@@ -31,21 +31,21 @@ class CourseController extends Controller
         }
         $old = Course::find($request->id);
         if ($request->file('image')) {
-    
+
             $file = $request->file('image');
             $imageName = $file->hashName();
-            $destinationPath = public_path().'/assets/uploads/';
-            if (($old->image != '' || $old->image != null) && file_exists($destinationPath.$old->image)) {
-                unlink($destinationPath.$old->image);
+            $destinationPath = public_path() . '/assets/uploads/';
+            if (($old->image != '' || $old->image != null) && file_exists($destinationPath . $old->image)) {
+                unlink($destinationPath . $old->image);
             }
             $file->move($destinationPath, $imageName);
         }
         if ($request->file('video')) {
             $file2 = $request->file('video');
             $videoName = $file2->hashName();
-            $destinationPath = public_path().'/assets/uploads/';
-            if (($old->video != '' || $old->video != null) && file_exists($destinationPath.$old->video)) {
-                unlink($destinationPath.$old->video);
+            $destinationPath = public_path() . '/assets/uploads/';
+            if (($old->video != '' || $old->video != null) && file_exists($destinationPath . $old->video)) {
+                unlink($destinationPath . $old->video);
             }
             $file2->move($destinationPath, $videoName);
         }
@@ -79,7 +79,7 @@ class CourseController extends Controller
         if ($val->fails()) {
             return response(['errors' => $val->errors()->all()], 422);
         }
-        $slug = rand(111111, 9999999).Str::slug($request->title);
+        $slug = rand(111111, 9999999) . Str::slug($request->title);
         $course = Course::create([
             'user_id' => auth()->user()->id,
             'slug' => $slug,
@@ -188,17 +188,17 @@ class CourseController extends Controller
         ], 200);
     }
 
-    function coursesByCategory($id){
-        $courses = Course::with('user')->where('category_id',$id)->paginate(25);
+    function coursesByCategory($id)
+    {
+        $courses = Course::with('user')->where('category_id', $id)->paginate(25);
 
-        return response(['data'=>$courses],200);
+        return response(['data' => $courses], 200);
     }
 
-    function getCoursesRandomly(){
-        $courses = Course::with('user')->get()->random(8);
+    function getCoursesRandomly()
+    {
+        $courses = Course::with('user')->inRandomOrder()->limit(30)->get();
 
-        return response(['data'=>$courses],200);
+        return response(['data' => $courses], 200);
     }
-
-
 }
