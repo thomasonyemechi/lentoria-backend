@@ -8,6 +8,28 @@ use Illuminate\Support\Facades\Validator;
 
 class LectureController extends Controller
 {
+
+
+    function updateVideoLink(Request $request)
+    {
+        $val = Validator::make($request->all(), [
+            'lecture_id' => 'required|exists:lectures:id',
+            'uri' => 'required'
+        ]);
+        if ($val->fails()) {
+            return response(['errors' => $val->errors()->all()], 422);
+        }
+
+        $lecture = Lecture::find($request->lecture_id);
+        $lecture->update([
+            'main_content' => $request->uri
+        ]);
+
+
+        return response([
+            'message' => 'Lecture Video has been updated scuessfully'
+        ], 200);
+    }
     public function addLecture(Request $request)
     {
         $val = Validator::make($request->all(), [
