@@ -38,8 +38,6 @@ Route::get('/courses/{id}', [CourseController::class, 'coursesByCategory']);
 Route::get('get_sections/{course_id}', [SectionController::class, 'getSections']);
 Route::get('fetch_lectures/{section_id}', [LectureController::class, 'fetchLectures']);
 Route::get('/category', [CategoryController::class, 'activeCategories']);
-Route::get('fetch_faq/{course_id}', [FaqController::class, 'fetchFaq']);
-
 
 
 
@@ -100,7 +98,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::post('add_lecture', [LectureController::class, 'addLecture']);
     Route::get('fetch_lectures/{section_id}', [LectureController::class, 'fetchLectures']);
     Route::post('order_lecture', [LectureController::class, 'orderLecture']);
+    Route::post('update_lecture_video', [LectureController::class, 'updateVideoLink']);
+    Route::post('update_lecture', [LectureController::class, 'updateLecture']);
 
+    
     //materials
 
     Route::post('add_materials', [MaterialController::class, 'createMaterial']);
