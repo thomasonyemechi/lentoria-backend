@@ -13,7 +13,7 @@ class LectureController extends Controller
     function updateVideoLink(Request $request)
     {
         $val = Validator::make($request->all(), [
-            'lecture_id' => 'required|exists:lectures:id',
+            'lecture_id' => 'required|exists:lectures,id',
             'uri' => 'required'
         ]);
         if ($val->fails()) {
