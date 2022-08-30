@@ -27,7 +27,7 @@ class SectionController extends Controller
     }
 
     public function getSections($course_id){
-        return response(['data'=>Section::where('course_id', $course_id)->orderby('order', 'ASC')->get()],200);
+        return response(['data' => Section::where('course_id', $course_id)->orderby('order', 'ASC')->get()], 200);
     }
 
     public function getSection($id){
@@ -35,6 +35,14 @@ class SectionController extends Controller
 
         return response(['data'=>$section],200);
     }
+
+    public function getSectionsBySlug($slug)
+    {
+        $cid = Course::query()->where('slug', $slug)->pluck('id');
+        $section = Section::query()->where('course_id', $cid)->with('lectures')->orderBy('order', 'ASC')->get();
+        return response(['data' => $section], 200);
+    }
+
 
     public function getSectionWithLectures(){
         $sections = Section::with(['lectures:id,title'])->get();
