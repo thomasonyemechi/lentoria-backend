@@ -6,10 +6,68 @@ use App\Models\Course;
 use App\Models\CourseOwner;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class TransactionController extends Controller
 {
+
+
+    function purchaseFromWallet(Request $request)
+    {
+        $val = Validator::make($request->all(),[
+            'course_id'=>'exists:courses,id',
+        ]);
+        if($val->fails()){return response(['errors'=>$val->errors()->all()],422);}
+
+        $buyer = auth()->user();
+
+        $request->transaction_id = rand(11);
+
+        $course = Course::find($request->course_id);
+        $purchased = Transaction::where(['user_id' => $buyer->id, 'course_id' => $course->id])->count();
+        if($purchased > 0) { return response(['message' => 'You have already purchased this course'], 406); }
+        ////check if you are the course owner and wrops you from purchasing your own course
+        if($buyer->id == $course->user_id) { return response(['message' => 'You cannot purchase your own course'], 422); }
+
+        ///start course purchase ...  
+
+        $transaction = Transaction::create([
+            'transaction_id' => $request->transaction_id,
+            'course_id' => $course->id,
+            'course_owner_id' => $course->user->live_id,
+            'user_id' => $buyer->live_id,
+            'amount' => $course->price,
+            'status' => 0
+        ]);
+
+        $res = Http::asForm()->post(env('LINK'),[
+            'purchaseCourse' => 256,
+            'transaction_id' => $request->transaction_id,
+            'course_id' => $course->id,
+            'course_owner' => $course->user->live_id,
+            'course_buyer' => $buyer->live_id,
+            'amount' => $course->price,
+        ]);
+
+        $res = json_decode($res);
+
+        if($res->success) {
+            $transaction->update([
+                'status' => 1
+            ]);
+
+            return response([
+                'message' => 'Course has been purchased/register for sucessfully'
+            ], 200);
+        }
+
+        return response([
+            'message' => 'Error processing transaction, Pls retry'
+        ], 400);
+    }
+
+
     public function buyCourse(Request $request){
         $validated = Validator::make($request->all(),[
             'transaction_id'=>'unique:transactions,transaction_id',
@@ -29,5 +87,13 @@ class TransactionController extends Controller
             'status'=> 3,
         ]);
         return response(['message'=>'course_purchased'], 200);
+    }
+
+
+
+    function fetchLiveBalance($live_id)
+    {
+        $res = Http::asForm()->post(env('LINK').'?balance='.$live_id,);
+        return json_decode($res);
     }
 }
