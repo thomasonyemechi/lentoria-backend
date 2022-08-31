@@ -32,7 +32,7 @@ class TransactionController extends Controller
         if ($purchased > 0) {
             return response(['message' => 'You have already purchased this course'], 406);
         }
-        ////check if you are the course owner and wrops you from purchasing your own course
+        ////check if you are the course owner and stops you from purchasing your own course
         if ($buyer->id == $course->user_id) {
             return response(['message' => 'You cannot purchase your own course'], 422);
         }
@@ -42,8 +42,8 @@ class TransactionController extends Controller
         $transaction = Transaction::create([
             'transaction_id' => $request->transaction_id,
             'course_id' => $course->id,
-            'course_owner_id' => $course->user->live_id,
-            'user_id' => $buyer->live_id,
+            'course_owner_id' => $course->user->id,
+            'user_id' => $buyer->id,
             'amount' => $course->price,
             'status' => 0
         ]);

@@ -41,8 +41,6 @@ Route::get('/category', [CategoryController::class, 'activeCategories']);
 Route::get('fetch_faq/{course_id}', [FaqController::class, 'fetchFaq']);
 
 
-
-
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
     // category routes
     Route::post('/add_category', [CategoryController::class, 'create']);
@@ -60,6 +58,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('/fetch_single_instructor', [InstructorController::class, 'fetchSingleInstructor']);
     Route::get('/instructor_info', [InstructorController::class, 'getInstructorProfile']);
     Route::get('/fetchcategory/{id}', [CategoryController::class, 'fetchSingleCategory']);
+
+
     // Topic routes
     Route::post('/add_topic', [TopicController::class, 'createTopic']);
     Route::post('/update_topic/{id}', [TopicController::class, 'updateTopic']);
@@ -68,9 +68,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('/topics/{id}', [TopicController::class, 'getTopicsByCategory']);
 
 
-
     //Course routes
-
     Route::post('/create_new_course', [CourseController::class, 'createCourse']);
     Route::post('/course_update', [CourseController::class, 'courseUpdate']);
     Route::post('/course_update_info', [CourseController::class, 'courseInfoUpdate']);
@@ -82,10 +80,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::post('/update_price', [CourseController::class, 'updatePricing']);
 
 
-
-
     //Section routes
-
     Route::post('add_section', [SectionController::class, 'createSection']);
     Route::post('update_section', [SectionController::class, 'updateSection']);
     Route::get('get_sections/{course_id}', [SectionController::class, 'getSections']);
@@ -95,9 +90,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('sections_lectures/{slug}', [SectionController::class, 'getSectionsBySlug']);
 
 
-
     ///lectures
-
     Route::post('add_lecture', [LectureController::class, 'addLecture']);
     Route::get('fetch_lectures/{section_id}', [LectureController::class, 'fetchLectures']);
     Route::post('order_lecture', [LectureController::class, 'orderLecture']);
@@ -106,15 +99,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
 
 
     //materials
-
     Route::post('add_materials', [MaterialController::class, 'createMaterial']);
     Route::get('get_materials/{lecture_id}', [MaterialController::class, 'getMaterials']);
     Route::get('get_material/{id}', [MaterialController::class, 'getMaterial']);
     Route::post('update_material', [MaterialController::class, 'updateMaterial']);
 
+
     //annoucements
     Route::post('add_announcement', [AnnoucementController::class, 'createAnnouncement']);
     Route::get('get_announcements/{id}', [AnnoucementController::class, 'getAnnouncements']);
+
 
     //Wishlist
     Route::post('add_to_wishlist', [WishlistController::class, 'addToWishlist']);
