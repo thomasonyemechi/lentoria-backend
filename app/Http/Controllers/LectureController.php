@@ -30,6 +30,19 @@ class LectureController extends Controller
             'message' => 'Lecture Video has been updated scuessfully'
         ], 200);
     }
+
+    public function checkVideoLink(Request $request)
+    {
+        $val = Validator::make($request->all(), [
+            'lecture_id' => 'required|exists:lectures,id',
+        ]);
+        if ($val->fails()) {
+            return response(['errors' => $val->errors()], 422);
+        }
+
+        $uri = Lecture::find($request->lecture_id)->value('main_content');
+        return response(['data' => $uri], 200);
+    }
     public function addLecture(Request $request)
     {
         $val = Validator::make($request->all(), [

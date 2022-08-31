@@ -96,6 +96,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::post('order_lecture', [LectureController::class, 'orderLecture']);
     Route::post('update_lecture_video', [LectureController::class, 'updateVideoLink']);
     Route::post('update_lecture', [LectureController::class, 'updateLecture']);
+    Route::post('get_video_link', [LectureController::class, 'checkVideoLink']);
 
 
     //materials
