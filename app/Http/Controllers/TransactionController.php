@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\CourseOwner;
 use App\Models\Transaction;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
@@ -24,7 +25,7 @@ class TransactionController extends Controller
 
         $buyer = auth()->user();
 
-        $request->transaction_id = rand(11);
+        $request->transaction_id = mt_rand(100000000000, 999999999999);
 
         $course = Course::find($request->course_id);
         $purchased = Transaction::where(['user_id' => $buyer->id, 'course_id' => $course->id])->count();
