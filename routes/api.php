@@ -127,6 +127,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     //BuyCourse
 
     Route::post('buy_course', [TransactionController::class, 'buyCourse']);
+    Route::post('wallet_purchase', [TransactionController::class, 'purchaseFromWallet']);
 
 
     ////faq
@@ -139,7 +140,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('fetch_faq/{course_id}', [FaqController::class, 'fetchFaq']);
     Route::get('plan/{live_id}', [InstructorController::class, 'fetchLivepetalPlan']);
 
-    ///other routes 
+    ///other routes
     Route::get('balance/{live_id}', [TransactionController::class, 'fetchLiveBalance']);
 
 });
