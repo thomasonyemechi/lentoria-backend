@@ -38,6 +38,8 @@ Route::get('/courses/{id}', [CourseController::class, 'coursesByCategory']);
 Route::get('get_sections/{course_id}', [SectionController::class, 'getSections']);
 Route::get('fetch_lectures/{section_id}', [LectureController::class, 'fetchLectures']);
 Route::get('/category', [CategoryController::class, 'activeCategories']);
+Route::get('fetch_faq/{course_id}', [FaqController::class, 'fetchFaq']);
+
 
 
 
@@ -90,6 +92,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('get_single_section/{id}', [SectionController::class, 'getSection']);
     Route::get('sections_lectures', [SectionController::class, 'getSectionWithLectures']);
     Route::post('order_section', [SectionController::class, 'orderSection']);
+    Route::get('sections_lectures/{slug}', [SectionController::class, 'getSectionsBySlug']);
 
 
 
@@ -101,7 +104,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::post('update_lecture_video', [LectureController::class, 'updateVideoLink']);
     Route::post('update_lecture', [LectureController::class, 'updateLecture']);
 
-    
+
     //materials
 
     Route::post('add_materials', [MaterialController::class, 'createMaterial']);
@@ -135,9 +138,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::post('delete_faq', [FaqController::class, 'deleteFaq']);
     Route::get('fetch_faq/{course_id}', [FaqController::class, 'fetchFaq']);
     Route::get('plan/{live_id}', [InstructorController::class, 'fetchLivepetalPlan']);
+<<<<<<< HEAD
 
 
     ///other routes 
     Route::get('balance/{live_id}', [TransactionController::class, 'fetchLiveBalance']);
 
 });
+=======
+});
+>>>>>>> 509e27322074f652c11e17d92057d0ed3b3abfac
