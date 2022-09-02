@@ -40,7 +40,7 @@ Route::get('fetch_lectures/{section_id}', [LectureController::class, 'fetchLectu
 Route::get('/category', [CategoryController::class, 'activeCategories']);
 Route::get('fetch_faq/{course_id}', [FaqController::class, 'fetchFaq']);
 
-
+Route::post('/vid',[LectureController::class,'vidTest']);
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
     // category routes
     Route::post('/add_category', [CategoryController::class, 'create']);

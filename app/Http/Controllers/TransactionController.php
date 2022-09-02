@@ -25,6 +25,7 @@ class TransactionController extends Controller
 
         $buyer = auth()->user();
 
+
         $request->transaction_id = mt_rand(100000000000, 999999999999);
 
         $course = Course::find($request->course_id);
