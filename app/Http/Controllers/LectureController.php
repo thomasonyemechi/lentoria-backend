@@ -21,8 +21,8 @@ class LectureController extends Controller
         }
 
         $lecture = Lecture::find($request->lecture_id);
-        $lecture->update([
-            'main_content' => $request->uri
+        $lecture->update(['main_content' => $request->uri,
+            'duration' => $request->duration,
         ]);
 
 
