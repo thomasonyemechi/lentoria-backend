@@ -30,6 +30,19 @@ class LectureController extends Controller
             'message' => 'Lecture Video has been updated scuessfully'
         ], 200);
     }
+
+    public function checkVideoLink(Request $request)
+    {
+        $val = Validator::make($request->all(), [
+            'lecture_id' => 'required|exists:lectures,id',
+        ]);
+        if ($val->fails()) {
+            return response(['errors' => $val->errors()], 422);
+        }
+
+        $uri = Lecture::find($request->lecture_id)->value('main_content');
+        return response(['data' => $uri], 200);
+    }
     public function addLecture(Request $request)
     {
         $val = Validator::make($request->all(), [
@@ -61,7 +74,7 @@ class LectureController extends Controller
         if ($val->fails()) {
             return response(['errors' => $val->errors()->all()], 422);
         }
-        Lecture::where('id',$request->id)->update([
+        Lecture::where('id', $request->id)->update([
             'title' => $request->title,
             'section_id' => $request->section_id,
             'description' => $request->description,
@@ -108,5 +121,14 @@ class LectureController extends Controller
         return response([
             'message' => 'Lecture has be ordered sucessfully',
         ], 200);
+    }
+
+    public function vidTest(Request $request)
+    {
+        $file = $request->file('video');
+        $fileName = $file->hashName();
+        $destinationPath = public_path() . '/assets/uploads/';
+        $file->move($destinationPath, $fileName);
+        return response(['data' => $request->all()], 200);
     }
 }
