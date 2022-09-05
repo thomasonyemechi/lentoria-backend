@@ -30,6 +30,7 @@ class AuthController extends Controller
                 'message' => $res['message'],
             ], 401);
         }
+        
 
         $this->checkAndValidateUser($res['data']);
 
