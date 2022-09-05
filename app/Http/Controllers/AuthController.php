@@ -38,7 +38,11 @@ class AuthController extends Controller
         }
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
 
-        return response(['message' => 'Login successfull', 'access_token' => $accessToken, 'data' => auth()->user()], 200);
+        $user = auth()->user();
+
+        $in = ($user->instructor) ? 1 : 0;
+
+        return response(['message' => 'Login successfull', 'access_token' => $accessToken, 'data' => $user, 'instructor' => $in, 'admin' => $user->role  ], 200);
     }
 
     public function checkAndValidateUser($data)
