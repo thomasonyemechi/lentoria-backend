@@ -62,6 +62,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     //BuyCourse
     Route::post('buy_course', [TransactionController::class, 'buyCourse']);
     Route::post('wallet_purchase', [TransactionController::class, 'purchaseFromWallet']);
+    Route::post('card_purchase', [TransactionController::class, 'buyCourseWithCard']);
+
+
 
     ///other routes
     Route::get('balance/{live_id}', [TransactionController::class, 'fetchLiveBalance']);
