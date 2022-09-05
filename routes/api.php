@@ -39,77 +39,17 @@ Route::get('get_sections/{course_id}', [SectionController::class, 'getSections']
 Route::get('fetch_lectures/{section_id}', [LectureController::class, 'fetchLectures']);
 Route::get('/category', [CategoryController::class, 'activeCategories']);
 Route::get('fetch_faq/{course_id}', [FaqController::class, 'fetchFaq']);
+Route::post('/vid', [LectureController::class, 'vidTest']);
 
-Route::post('/vid',[LectureController::class,'vidTest']);
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
-    // category routes
-    Route::post('/add_category', [CategoryController::class, 'create']);
-    Route::get('category/{id}', [CategoryController::class, 'edit']);
-    Route::post('/category/{id}', [CategoryController::class, 'update']);
-    Route::get('/category', [CategoryController::class, 'fetchCategory']);
-    Route::post('/status', [CategoryController::class, 'status']);
 
-
-    // Instructor fetch
+    ///become instructor
     Route::post('/become_instructor', [InstructorController::class, 'becomeInstructor01']);
     Route::post('/payto_become_instructor', [InstructorController::class, 'becomeInstructor02']);
-    Route::post('/update_instructor_profile', [InstructorController::class, 'updateInstructorProfile']);
     Route::get('/fetch_all_instructor', [InstructorController::class, 'fetchAllInstructor']);
     Route::get('/fetch_single_instructor', [InstructorController::class, 'fetchSingleInstructor']);
     Route::get('/instructor_info', [InstructorController::class, 'getInstructorProfile']);
-    Route::get('/fetchcategory/{id}', [CategoryController::class, 'fetchSingleCategory']);
-
-
-    // Topic routes
-    Route::post('/add_topic', [TopicController::class, 'createTopic']);
-    Route::post('/update_topic/{id}', [TopicController::class, 'updateTopic']);
-    Route::get('/topic/{id}', [TopicController::class, 'getTopic']);
-    Route::get('/topics', [TopicController::class, 'getTopics']);
-    Route::get('/topics/{id}', [TopicController::class, 'getTopicsByCategory']);
-
-
-    //Course routes
-    Route::post('/create_new_course', [CourseController::class, 'createCourse']);
-    Route::post('/course_update', [CourseController::class, 'courseUpdate']);
-    Route::post('/course_update_info', [CourseController::class, 'courseInfoUpdate']);
-    Route::get('/fetch_my_course', [CourseController::class, 'fetchMyCourse']);
-    Route::get('/course/landing_info/{slug}', [CourseController::class, 'fetchCourse']);
-    Route::get('/course/intended_learners/{slug}', [CourseController::class, 'fetchCourseLearners']);
-    Route::get('/course/{slug}', [CourseController::class, 'fetchCourse']);
-    Route::post('/course_messageupdate', [CourseController::class, 'addCourseMessage']);
-    Route::post('/update_price', [CourseController::class, 'updatePricing']);
-
-
-    //Section routes
-    Route::post('add_section', [SectionController::class, 'createSection']);
-    Route::post('update_section', [SectionController::class, 'updateSection']);
-    Route::get('get_sections/{course_id}', [SectionController::class, 'getSections']);
-    Route::get('get_single_section/{id}', [SectionController::class, 'getSection']);
-    Route::get('sections_lectures', [SectionController::class, 'getSectionWithLectures']);
-    Route::post('order_section', [SectionController::class, 'orderSection']);
-    Route::get('sections_lectures/{slug}', [SectionController::class, 'getSectionsBySlug']);
-
-
-    ///lectures
-    Route::post('add_lecture', [LectureController::class, 'addLecture']);
-    Route::get('fetch_lectures/{section_id}', [LectureController::class, 'fetchLectures']);
-    Route::post('order_lecture', [LectureController::class, 'orderLecture']);
-    Route::post('update_lecture_video', [LectureController::class, 'updateVideoLink']);
-    Route::post('update_lecture', [LectureController::class, 'updateLecture']);
-    Route::post('get_video_link', [LectureController::class, 'checkVideoLink']);
-
-
-    //materials
-    Route::post('add_materials', [MaterialController::class, 'createMaterial']);
-    Route::get('get_materials/{lecture_id}', [MaterialController::class, 'getMaterials']);
-    Route::get('get_material/{id}', [MaterialController::class, 'getMaterial']);
-    Route::post('update_material', [MaterialController::class, 'updateMaterial']);
-
-
-    //annoucements
-    Route::post('add_announcement', [AnnoucementController::class, 'createAnnouncement']);
-    Route::get('get_announcements/{id}', [AnnoucementController::class, 'getAnnouncements']);
-
+    
 
     //Wishlist
     Route::post('add_to_wishlist', [WishlistController::class, 'addToWishlist']);
@@ -120,22 +60,78 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('search_courses', [SearchController::class, 'searchCourses']);
 
     //BuyCourse
-
     Route::post('buy_course', [TransactionController::class, 'buyCourse']);
     Route::post('wallet_purchase', [TransactionController::class, 'purchaseFromWallet']);
-
-
-    ////faq
-    Route::post('add_faq', [FaqController::class, 'addFaq']);
-    Route::post(
-        'edit_faq',
-        [FaqController::class, 'editFaq']
-    );
-    Route::post('delete_faq', [FaqController::class, 'deleteFaq']);
-    Route::get('fetch_faq/{course_id}', [FaqController::class, 'fetchFaq']);
-    Route::get('plan/{live_id}', [InstructorController::class, 'fetchLivepetalPlan']);
 
     ///other routes
     Route::get('balance/{live_id}', [TransactionController::class, 'fetchLiveBalance']);
 
+    Route::get('/category', [CategoryController::class, 'fetchCategory']);
+    Route::get('category/{id}', [CategoryController::class, 'edit']);
+    Route::get('/topic/{id}', [TopicController::class, 'getTopic']);
+    Route::get('/topics', [TopicController::class, 'getTopics']);
+    Route::get('/topics/{id}', [TopicController::class, 'getTopicsByCategory']);
+    Route::get('/fetchcategory/{id}', [CategoryController::class, 'fetchSingleCategory']);
+
+    Route::group(['middleware' => ['admin']], function () {
+        // category routes
+        Route::post('/add_category', [CategoryController::class, 'create']);
+        Route::post('/category/{id}', [CategoryController::class, 'update']);
+        Route::post('/status', [CategoryController::class, 'status']);
+
+        // Topic routes
+        Route::post('/add_topic', [TopicController::class, 'createTopic']);
+        Route::post('/update_topic/{id}', [TopicController::class, 'updateTopic']);
+    });
+
+
+    Route::group(['middleware' => ['instructor']], function () {
+        // Instructor
+        Route::post('/update_instructor_profile', [InstructorController::class, 'updateInstructorProfile']);
+
+        //Course routes
+        Route::post('/create_new_course', [CourseController::class, 'createCourse']);
+        Route::post('/course_update', [CourseController::class, 'courseUpdate']);
+        Route::post('/course_update_info', [CourseController::class, 'courseInfoUpdate']);
+        Route::get('/fetch_my_course', [CourseController::class, 'fetchMyCourse']);
+        Route::get('/course/landing_info/{slug}', [CourseController::class, 'fetchCourse']);
+        Route::get('/course/intended_learners/{slug}', [CourseController::class, 'fetchCourseLearners']);
+        Route::get('/course/{slug}', [CourseController::class, 'fetchCourse']);
+        Route::post('/course_messageupdate', [CourseController::class, 'addCourseMessage']);
+        Route::post('/update_price', [CourseController::class, 'updatePricing']);
+
+        ////faq
+        Route::post('add_faq', [FaqController::class, 'addFaq']);
+        Route::post('edit_faq', [FaqController::class, 'editFaq']);
+        Route::post('delete_faq', [FaqController::class, 'deleteFaq']);
+        Route::get('fetch_faq/{course_id}', [FaqController::class, 'fetchFaq']);
+        Route::get('plan/{live_id}', [InstructorController::class, 'fetchLivepetalPlan']);
+
+        //Section routes
+        Route::post('add_section', [SectionController::class, 'createSection']);
+        Route::post('update_section', [SectionController::class, 'updateSection']);
+        Route::get('get_sections/{course_id}', [SectionController::class, 'getSections']);
+        Route::get('get_single_section/{id}', [SectionController::class, 'getSection']);
+        Route::get('sections_lectures', [SectionController::class, 'getSectionWithLectures']);
+        Route::post('order_section', [SectionController::class, 'orderSection']);
+        Route::get('sections_lectures/{slug}', [SectionController::class, 'getSectionsBySlug']);
+
+        ///lectures
+        Route::post('add_lecture', [LectureController::class, 'addLecture']);
+        Route::get('fetch_lectures/{section_id}', [LectureController::class, 'fetchLectures']);
+        Route::post('order_lecture', [LectureController::class, 'orderLecture']);
+        Route::post('update_lecture_video', [LectureController::class, 'updateVideoLink']);
+        Route::post('update_lecture', [LectureController::class, 'updateLecture']);
+        Route::post('get_video_link', [LectureController::class, 'checkVideoLink']);
+
+        //materials
+        Route::post('add_materials', [MaterialController::class, 'createMaterial']);
+        Route::get('get_materials/{lecture_id}', [MaterialController::class, 'getMaterials']);
+        Route::get('get_material/{id}', [MaterialController::class, 'getMaterial']);
+        Route::post('update_material', [MaterialController::class, 'updateMaterial']);
+
+        //annoucements
+        Route::post('add_announcement', [AnnoucementController::class, 'createAnnouncement']);
+        Route::get('get_announcements/{id}', [AnnoucementController::class, 'getAnnouncements']);
+    });
 });
