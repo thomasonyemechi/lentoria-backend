@@ -79,7 +79,7 @@ class TransactionController extends Controller
     function buyCourseWithCard(Request $request)
     {
         $val = Validator::make($request->all(), [
-            'course_id' => 'exists:courses,id',
+            'course_id' => 'required|exists:courses,id',
             'transaction_id' => 'required'
         ]);
         if ($val->fails()) {
@@ -173,6 +173,10 @@ class TransactionController extends Controller
             'course_id' => $request->course_id,
             'user_id' => $user->id
         ]);
+
+        if($tran->status == 1) {
+
+        }
     }
 
 

@@ -20,4 +20,9 @@ class Category extends Model
     {
         return $this->hasMany(Course::class);
     }
+
+    function published_courses()
+    {
+        return $this->hasManyThrough(Course::class, Topic::class)->inRandomOrder()->where('published','=', 1)->take(25);
+    }
 }
