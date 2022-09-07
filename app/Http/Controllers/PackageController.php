@@ -27,14 +27,13 @@ class PackageController extends InstructorController
         $this->catchActivation($user->id, $request->transaction_id, $res->amount, 'Activation from card', $res->errors);
         if ($res->active) {
             $this->registerAffliate($user->id);
-            if($request->instructor == 1) {
+            if ($request->instructor == 1) {
                 $this->becomeInstructor($user->id);
                 return response([
                     'message' => 'You are have sucessfully upgraded you package'
                 ], 200);
             }
-            return response([
-                'messgae' => 'You are have sucessfully upgraded you package'
+            return response(['message' => 'You are have sucessfully upgraded you package'
             ], 200);
         }
         return response([
@@ -54,20 +53,19 @@ class PackageController extends InstructorController
         if ($validated->fails()) {
             return response(['errors' => $validated->errors()->all()], 422);
         }
-        $user = auth()->user(); 
-        $trno = rand(11111111111,999999999999999);
+        $user = auth()->user();
+        $trno = rand(11111111111, 999999999999999);
         $res = $this->activatePlan($user->live_id, $request->plan);
         $this->catchActivation($user->id, $trno, $res->amount, 'Activation from wallet', $res->errors);
         if ($res->active) {
             $this->registerAffliate($user->id);
-            if($request->instructor == 1) {
+            if ($request->instructor == 1) {
                 $this->becomeInstructor($user->id);
                 return response([
                     'message' => 'You are have sucessfully upgraded you package'
                 ], 200);
             }
-            return response([
-                'messgae' => 'You are have sucessfully upgraded you package'
+            return response(['message' => 'You are have sucessfully upgraded you package'
             ], 200);
         }
         return response([
