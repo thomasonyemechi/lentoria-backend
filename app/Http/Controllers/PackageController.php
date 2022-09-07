@@ -17,14 +17,14 @@ class PackageController extends InstructorController
         $validated = Validator::make($request->all(), [
             'instructor' => 'required',
             'plan' => 'required',
-            'trnasaction_id' => 'required'
+            'transaction_id' => 'required'
         ]);
         if ($validated->fails()) {
             return response(['errors' => $validated->errors()->all()], 422);
         }
         $user = auth()->user();
-        $res = $this->activatePlan($user->id, $request->plan);
-        $this->catchActivation($user->id, $request->trnasaction_id, $res->amount, 'Activation from card', $res->errors);
+        $res = $this->activatePlan($user->live_id, $request->plan);
+        $this->catchActivation($user->id, $request->transaction_id, $res->amount, 'Activation from card', $res->errors);
         if ($res->active) {
             $this->registerAffliate($user->id);
             if($request->instructor == 1) {
