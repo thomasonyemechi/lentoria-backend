@@ -107,4 +107,13 @@ class PackageController extends InstructorController
         ]);
         return;
     }
+
+    function fetchLivepetalPlan($live_id)
+    {
+        $res = Http::asForm()->post(env('LINK'), [
+            'live_id' => $live_id,
+            'userPackage' => 34567
+        ]);
+        return json_decode($res);
+    }
 }

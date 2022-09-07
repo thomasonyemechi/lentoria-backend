@@ -22,75 +22,6 @@ class InstructorController extends Controller
         Instructor::updateOrCreate(['user_id' => $user->id]);
     }
 
-
-
-    function becomeInstructor01()
-    {
-        $user = auth()->user();
-        $live_user = $this->fetchLivepetalPlan($user->live_id);
-        if ($live_user->active) {
-            $this->becomeInstructor($user->id);
-            return response([
-                'message' => 'You are now an instructor'
-            ], 200);
-        }
-        return response([
-            'message' => 'Please activate a livepetal membership package to become an instructor'
-        ], 402);
-    }
-
-
-    function becomeInstructor02(Request $request)
-    {
-
-        $validated = Validator::make($request->all(), [
-            'amount' => 'required|integer',
-            'transaction_id' => 'required|integer',
-        ]);
-
-        if ($validated->fails()) {
-            return response(['errors' => $validated->errors()->all()], 422);
-        }
-
-        $user = auth()->user();
-        ActivationPayment::create([
-            'user_id' => $user->id,
-            'transaction_id' => $request->transaction_id,
-            'amount' => $request->amount,
-            'remark' => 'Account Activation Fee'
-        ]);
-
-        $res = Http::asForm()->post(env('LINK'), [
-            'live_id' => $user->live_id,
-            'activateBasicPackage' => 6454,
-        ]);
-
-        $res = json_decode($res);
-
-        if ($res->active) {
-            $this->becomeInstructor($user->id);
-            return response([
-                'message' => 'You are now an instructor'
-            ], 200);
-        }
-
-        return response([
-            'message' => $res->message
-        ], 400);
-    }
-
-
-    function fetchLivepetalPlan($live_id)
-    {
-        $res = Http::asForm()->post(env('LINK'), [
-            'live_id' => $live_id,
-            'userPackage' => 34567
-        ]);
-        return json_decode($res);
-    }
-
-
-
     public function updateInstructorProfile(Request $request)
     {
         $validated = Validator::make($request->all(), [
@@ -100,7 +31,7 @@ class InstructorController extends Controller
         if ($validated->fails()) {
             return response(['errors' => $validated->errors()->all()], 422);
         }
-
+        
         $user = User::find($request->id);
         $user->instructor->update([
             'headline' => $request->headline,
@@ -121,7 +52,6 @@ class InstructorController extends Controller
     public function fetchAllInstructor()
     {
         $instructors = Instructor::with(['user'])->paginate(100);
-
         return response([
             'data' => $instructors,
         ], 200);
@@ -130,7 +60,6 @@ class InstructorController extends Controller
     public function fetchSingleInstructor()
     {
         $user = User::with(['instructor'])->where('id', auth()->user()->id)->first();
-
         return response([
             'data' => $user,
         ], 200);
@@ -139,7 +68,6 @@ class InstructorController extends Controller
     public function fetchInstructorByCourseId($id)
     {
         $course = Course::findOrFail($id);
-
         return response([
             'data' => [
                 'course_info' => collect($course)->forget('user')->all(),
@@ -154,7 +82,6 @@ class InstructorController extends Controller
     {
         $user = User::findOrFail($id);
         $courses_no = Course::ofGetUser($id)->count();
-
         return response([
             'data' => [
                 'basic_info' => collect($user)->forget('instructor')->all(),
@@ -167,7 +94,6 @@ class InstructorController extends Controller
     public function fetchCoursesForInstructor($id)
     {
         $courses = Course::ofGetUser($id)->latest()->paginate(25);
-
         return response([
             'data' => $courses,
         ]);
