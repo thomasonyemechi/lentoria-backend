@@ -44,6 +44,8 @@ Route::get('/category', [CategoryController::class, 'activeCategories']);
 Route::get('/fetchcourse_by_type', [CourseController::class, 'fetchCourseByTypeGroupByCategoryAll']);
 Route::get('fetch_faq/{course_id}', [FaqController::class, 'fetchFaq']);
 Route::post('/vid', [LectureController::class, 'vidTest']);
+Route::get('/course_info2/{slug}', [CourseController::class, 'fetchCourse']);
+
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
 
@@ -54,7 +56,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('/fetch_all_instructor', [InstructorController::class, 'fetchAllInstructor']);
     Route::get('/fetch_single_instructor', [InstructorController::class, 'fetchSingleInstructor']);
     Route::get('/instructor_info', [InstructorController::class, 'getInstructorProfile']);
-    
+
 
     //Wishlist
     Route::post('add_to_wishlist', [WishlistController::class, 'addToWishlist']);
