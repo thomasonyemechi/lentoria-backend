@@ -210,33 +210,29 @@ class CourseController extends Controller
     {
         //$categories = Category::inRandomOrder()->with('published_courses')->get();
         $categories = Category::inRandomOrder()->limit(10)->get();
-        foreach($categories as $index => $cat){
+        foreach ($categories as $index => $cat) {
             $course = Course::where(['category_id' => $cat->id, 'published' => 1, 'course_type' => $type_id])->inRandomOrder()->limit(10)->get();
             $categories[$index]['courses'] = $course;
-        }  
-        
+        }
+
         $new_arr = [];
-        foreach($categories as $cat){
+        foreach ($categories as $cat) {
             $ct = count($cat['courses']);
-            if($ct > 0) {
+            if ($ct > 0) {
                 $new_arr[] = $cat;
             }
-
         }
         return $new_arr;
     }
 
     function fetchCourseByTypeGroupByCategoryAll()
     {
-        $types = Type::all();
-        foreach($types as $index => $type) {
-            $types[$index]['categories'] = $this-> fetchCourseByTypeGroupByCategory($type->id);
+        $types = Type::inRandomOrder()->limit(3)->get();
+        foreach ($types as $index => $type) {
+            $types[$index]['categories'] = $this->fetchCourseByTypeGroupByCategory($type->id);
         }
         return response([
             'data' => $types
         ], 200);
     }
-
-
-
 }
