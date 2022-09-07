@@ -48,4 +48,9 @@ class Course extends Model
     {
         return $this->hasMany(Faq::class, 'course_id');
     }
+
+    function type()
+    {
+        return $this->belongsTo(Type::class, 'course_type');
+    }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Course;
 use App\Models\CourseInfo;
 use App\Models\CourseOwner;
+use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -166,6 +168,7 @@ class CourseController extends Controller
             'what_you_will_learn' => 'required|',
             'course_requirement' => 'required|',
             'course_audience' => 'required|',
+            'opportunities' => 'string'
         ]);
 
 
@@ -181,6 +184,7 @@ class CourseController extends Controller
             'course_requirement' => json_encode($request->course_requirement),
             'course_audience' => json_encode($request->course_audience),
             'purpose' => json_encode($request->purpose),
+            'opportunities' => $request->opportunities
         ]);
 
         return response([
@@ -201,4 +205,38 @@ class CourseController extends Controller
 
         return response(['data' => $courses], 200);
     }
+
+    function fetchCourseByTypeGroupByCategory($type_id)
+    {
+        //$categories = Category::inRandomOrder()->with('published_courses')->get();
+        $categories = Category::inRandomOrder()->limit(10)->get();
+        foreach($categories as $index => $cat){
+            $course = Course::where(['category_id' => $cat->id, 'published' => 1, 'course_type' => $type_id])->inRandomOrder()->limit(10)->get();
+            $categories[$index]['courses'] = $course;
+        }  
+        
+        $new_arr = [];
+        foreach($categories as $cat){
+            $ct = count($cat['courses']);
+            if($ct > 0) {
+                $new_arr[] = $cat;
+            }
+
+        }
+        return $new_arr;
+    }
+
+    function fetchCourseByTypeGroupByCategoryAll()
+    {
+        $types = Type::all();
+        foreach($types as $index => $type) {
+            $types[$index]['categories'] = $this-> fetchCourseByTypeGroupByCategory($type->id);
+        }
+        return response([
+            'data' => $types
+        ], 200);
+    }
+
+
+
 }

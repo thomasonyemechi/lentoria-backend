@@ -8,11 +8,14 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\LectureController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\PackageController;
+use App\Http\Controllers\PublishController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SectionController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TypeController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +41,7 @@ Route::get('/courses/{id}', [CourseController::class, 'coursesByCategory']);
 Route::get('get_sections/{course_id}', [SectionController::class, 'getSections']);
 Route::get('fetch_lectures/{section_id}', [LectureController::class, 'fetchLectures']);
 Route::get('/category', [CategoryController::class, 'activeCategories']);
+Route::get('/fetchcourse_by_type', [CourseController::class, 'fetchCourseByTypeGroupByCategoryAll']);
 Route::get('fetch_faq/{course_id}', [FaqController::class, 'fetchFaq']);
 Route::post('/vid', [LectureController::class, 'vidTest']);
 Route::get('/course_info2/{slug}', [CourseController::class, 'fetchCourse']);
@@ -46,8 +50,9 @@ Route::get('/course_info2/{slug}', [CourseController::class, 'fetchCourse']);
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
 
     ///become instructor
-    Route::post('/become_instructor', [InstructorController::class, 'becomeInstructor01']);
-    Route::post('/payto_become_instructor', [InstructorController::class, 'becomeInstructor02']);
+    Route::post('/activate_from_wallet', [PackageController::class, 'activateFromWallet']);
+    Route::post('/activate_from_card', [PackageController::class, 'activateFromCard']);
+    // Route::post('/payto_become_instructor', [InstructorController::class, 'becomeInstructor02']);
     Route::get('/fetch_all_instructor', [InstructorController::class, 'fetchAllInstructor']);
     Route::get('/fetch_single_instructor', [InstructorController::class, 'fetchSingleInstructor']);
     Route::get('/instructor_info', [InstructorController::class, 'getInstructorProfile']);
@@ -77,6 +82,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('/topics', [TopicController::class, 'getTopics']);
     Route::get('/topics/{id}', [TopicController::class, 'getTopicsByCategory']);
     Route::get('/fetchcategory/{id}', [CategoryController::class, 'fetchSingleCategory']);
+    Route::get('/get_type_admin', [TypeController::class, 'fetchTypesAdmin']);
+
 
     Route::group(['middleware' => ['admin']], function () {
         // category routes
@@ -87,6 +94,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         // Topic routes
         Route::post('/add_topic', [TopicController::class, 'createTopic']);
         Route::post('/update_topic/{id}', [TopicController::class, 'updateTopic']);
+
+        // Course Types
+        Route::post('/add_type', [TypeController::class, 'createCourseType']);
+        Route::post('/update_type', [TypeController::class, 'updateType']);
+
     });
 
 
@@ -138,5 +150,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         //annoucements
         Route::post('add_announcement', [AnnoucementController::class, 'createAnnouncement']);
         Route::get('get_announcements/{id}', [AnnoucementController::class, 'getAnnouncements']);
+
+
+        ///
+        Route::post('publish_course', [PublishController::class, 'publishCourse']);
+
     });
 });

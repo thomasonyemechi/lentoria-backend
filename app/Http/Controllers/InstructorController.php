@@ -86,7 +86,6 @@ class InstructorController extends Controller
             'live_id' => $live_id,
             'userPackage' => 34567
         ]);
-
         return json_decode($res);
     }
 
