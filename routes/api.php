@@ -8,6 +8,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\LectureController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PublishController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SectionController;
@@ -47,8 +48,9 @@ Route::post('/vid', [LectureController::class, 'vidTest']);
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
 
     ///become instructor
-    Route::post('/become_instructor', [InstructorController::class, 'becomeInstructor01']);
-    Route::post('/payto_become_instructor', [InstructorController::class, 'becomeInstructor02']);
+    Route::post('/activate_from_wallet', [PackageController::class, 'activateFromWallet']);
+    Route::post('/activate_from_card', [PackageController::class, 'activateFromCard']);
+    // Route::post('/payto_become_instructor', [InstructorController::class, 'becomeInstructor02']);
     Route::get('/fetch_all_instructor', [InstructorController::class, 'fetchAllInstructor']);
     Route::get('/fetch_single_instructor', [InstructorController::class, 'fetchSingleInstructor']);
     Route::get('/instructor_info', [InstructorController::class, 'getInstructorProfile']);
