@@ -45,6 +45,7 @@ Route::get('/fetchcourse_by_type', [CourseController::class, 'fetchCourseByTypeG
 Route::get('fetch_faq/{course_id}', [FaqController::class, 'fetchFaq']);
 Route::post('/vid', [LectureController::class, 'vidTest']);
 Route::get('/course_info2/{slug}', [CourseController::class, 'fetchCourse']);
+Route::post('/has_course', [TransactionController::class, 'hasCourse']);
 
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
@@ -52,7 +53,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     ///become instructor
     Route::post('/activate_from_wallet', [PackageController::class, 'activateFromWallet']);
     Route::post('/activate_from_card', [PackageController::class, 'activateFromCard']);
-    // Route::post('/payto_become_instructor', [InstructorController::class, 'becomeInstructor02']);
     Route::get('/fetch_all_instructor', [InstructorController::class, 'fetchAllInstructor']);
     Route::get('/fetch_single_instructor', [InstructorController::class, 'fetchSingleInstructor']);
     Route::get('/instructor_info', [InstructorController::class, 'getInstructorProfile']);

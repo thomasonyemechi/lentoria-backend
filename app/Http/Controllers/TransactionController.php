@@ -135,6 +135,33 @@ class TransactionController extends Controller
     }
 
 
+
+    function hasCourse(Request $request)
+    {
+
+        $val = Validator::make($request->all(), [
+            'user_id' => 'required|exists:users,id',
+            'course_id' => 'required|exists:courses,id'
+        ]);
+        if ($val->fails()) {
+            return response(['errors' => $val->errors()->all()], 422);
+        }
+        $purchased = Transaction::where(['user_id' => $request->user_id, 'course_id' => $request->course_id])->count();
+        $course = Course::find($request->course_id);
+        if($course->user_id == $request->user_id || $purchased > 0) {
+            return response([
+                'message' => 'User cannot purchase the course',
+                'status' => false,
+            ], 200);
+        }
+
+        return response([
+            'mesage' => 'User can purchase the course',
+            'status' => true
+        ], 200);
+    }
+
+
     // public function buyCourse(Request $request)
     // {
     //     $validated = Validator::make($request->all(), [
