@@ -272,7 +272,7 @@ class CourseController extends Controller
         //$categories = Category::inRandomOrder()->with('published_courses')->get();
         $categories = Category::inRandomOrder()->limit(10)->get();
         foreach ($categories as $index => $cat) {
-            $course = Course::where(['category_id' => $cat->id, 'published' => 1, 'course_type' => $type_id])->inRandomOrder()->limit(10)->get();
+            $course = Course::with(['user:id,firstname,lastname'])->where(['category_id' => $cat->id, 'published' => 1, 'course_type' => $type_id])->inRandomOrder()->limit(10)->get();
             $categories[$index]['courses'] = $course;
         }
 
