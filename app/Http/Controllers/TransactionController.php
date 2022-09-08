@@ -156,7 +156,7 @@ class TransactionController extends Controller
         }
 
         return response([
-            'mesage' => 'User can purchase the course',
+            'message' => 'User can purchase the course',
             'status' => true
         ], 200);
     }

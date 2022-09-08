@@ -14,6 +14,66 @@ use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
+
+    function generateLink($length)
+    {
+        return substr(str_shuffle(str_repeat('123456789abcdefghijklmnopqrstuvwxyz_-ABCDEFGHIJKLMNOPQRSTUVWXYZ', $length)), 0, $length);
+    }
+
+    function validateLink(Request $request)
+    {
+        $validated = Validator::make($request->all(), [
+            'link' => 'required',
+        ]);
+        if ($validated->fails()) {
+            return response(['error' => $validated->errors()->all()], 422);
+        }
+        $ck = Course::where(['link' => $request->link])->count();
+        $message = ($ck > 0) ? 'This link has been taken, try another' : 'Link is available';
+        $status = ($ck > 0) ? false : true;
+
+        return response([
+            'message' => $message,
+            'status' => $status
+        ], 200);
+    }
+
+
+    function getCourseFromLink($link)
+    {
+        $course = Course::where(['link' => $link])->first(['id', 'slug', 'title', 'link']);
+        if($course) {
+            return response([
+                'data' => $course
+            ], 200);
+        }
+
+        return response([
+            'message' => 'No course with this link was found'
+        ], 404);
+    }
+
+
+    function updateCourseLink(Request $request)
+    {
+        $validated = Validator::make($request->all(), [
+            'link' => 'required|unique:courses,link',
+            'course_id' => 'required|exists:courses,id'
+        ]);
+        if ($validated->fails()) {
+            return response(['error' => $validated->errors()->all()], 422);
+        }
+        
+        Course::where(['id' => $request->course_id])->update([
+            'link' => $request->link
+        ]);
+
+        return response([
+            'message' => 'Short link has been updated sucessfully'
+        ]);
+    }
+
+
     public function courseUpdate(Request $request)
     {
         $validated = Validator::make($request->all(), [
@@ -81,7 +141,7 @@ class CourseController extends Controller
         if ($val->fails()) {
             return response(['errors' => $val->errors()->all()], 422);
         }
-        $slug = rand(111111, 9999999) . Str::slug($request->title);
+        $slug = rand(111111, 9999999) .'_'. Str::slug($request->title);
         $course = Course::create([
             'user_id' => auth()->user()->id,
             'slug' => $slug,
@@ -90,6 +150,7 @@ class CourseController extends Controller
             'course_type' => $request->course_type,
             'category_id' => $request->category_id,
             'topic_id' => $request->topic_id,
+            'link' => $this->generateLink(10),
         ]);
 
         CourseOwner::create([

@@ -12,6 +12,22 @@ use Illuminate\Support\Facades\Validator;
 class PackageController extends InstructorController
 {
 
+    function fetcLivepetalPackagesAll()
+    {
+        $res = Http::asForm()->post(env('LINK').'?all_plan=456789',);
+        return response([
+            'data' => json_decode($res)
+        ], 200);
+    }
+
+    function fetcLivepetalPackagesSingle($plan_id)
+    {
+        $res = Http::asForm()->post(env('LINK').'?plan='.$plan_id,);
+        return response([
+            'data' => json_decode($res)
+        ], 200);
+    }
+
     function activateFromCard(Request $request)
     {
         $validated = Validator::make($request->all(), [
