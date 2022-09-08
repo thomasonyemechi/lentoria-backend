@@ -50,6 +50,8 @@ Route::get('/fetch_live_plans', [PackageController::class, 'fetcLivepetalPackage
 Route::get('/fetch_live_plan/{plan_id}', [PackageController::class, 'fetcLivepetalPackagesSingle']);
 Route::post('/get_course_from_link/{link}', [CourseController::class, 'getCourseFromLink']);
 
+Route::get('/get_topic_by_slug/{slug}', [TopicController::class, 'findTopicbySlug']);
+Route::get('/get_category_by_slug/{slug}', [CategoryController::class, 'findCategoryBySlug']);
 
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
@@ -81,7 +83,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('balance/{live_id}', [TransactionController::class, 'fetchLiveBalance']);
 
     Route::get('/category', [CategoryController::class, 'fetchCategory']);
-    Route::get('category/{id}', [CategoryController::class, 'edit']);
     Route::get('/topic/{id}', [TopicController::class, 'getTopic']);
     Route::get('/topics', [TopicController::class, 'getTopics']);
     Route::get('/topics/{id}', [TopicController::class, 'getTopicsByCategory']);
@@ -92,7 +93,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::group(['middleware' => ['admin']], function () {
         // category routes
         Route::post('/add_category', [CategoryController::class, 'create']);
-        Route::post('/category/{id}', [CategoryController::class, 'update']);
+        Route::post('/category', [CategoryController::class, 'update']);
         Route::post('/status', [CategoryController::class, 'status']);
 
         // Topic routes

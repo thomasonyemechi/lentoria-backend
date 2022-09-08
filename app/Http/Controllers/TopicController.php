@@ -6,6 +6,8 @@ use App\Models\Course;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
 
 class TopicController extends Controller
 {
@@ -20,15 +22,33 @@ class TopicController extends Controller
             return response(['errors' => $validation->errors()->all()], 422);
         }
 
-        $topics = Topic::create($request->all());
+
+        $topics = Topic::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+            'slug' => Str::slug($request->name)
+        ]);
 
         return response(['message' => 'Topic added successfully'], 200);
     }
 
     public function getTopic($id){
         $topic = Topic::find($id);
-
         return response(['data'=>$topic],200);
+    }
+
+    function findTopicbySlug($slug)
+    {
+        $topic = Topic::where('slug', $slug)->first();
+        if(!$topic) {
+            return response([
+                'message' => 'No topic was found for this slug'
+            ], 400);
+        }
+        return response([
+            'data' => $topic
+        ], 200);
     }
 
     public function getTopics()
@@ -58,6 +78,7 @@ class TopicController extends Controller
             return response(['errors' => $validation->errors()->all()], 422);
         }
         Topic::where('id', $id)->update([
+            'slug' => Str::slug($request->name),
             'name' => $request->name,
             'description' => $request->description,
             'category_id'=> $request->category_id,
