@@ -48,7 +48,7 @@ Route::get('/course_info2/{slug}', [CourseController::class, 'fetchCourse']);
 Route::post('/has_course', [TransactionController::class, 'hasCourse']);
 Route::get('/fetch_live_plans', [PackageController::class, 'fetcLivepetalPackagesAll']);
 Route::get('/fetch_live_plan/{plan_id}', [PackageController::class, 'fetcLivepetalPackagesSingle']);
-Route::post('/get_course_from_link/{link}', [CourseController::class, 'getCourseFromLink']);
+Route::get('/get_course_from_link/{link}', [CourseController::class, 'getCourseFromLink']);
 
 Route::get('/get_topic_by_slug/{slug}', [TopicController::class, 'findTopicbySlug']);
 Route::get('/get_category_by_slug/{slug}', [CategoryController::class, 'findCategoryBySlug']);
@@ -114,10 +114,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         // Instructor
         Route::post('/update_instructor_profile', [InstructorController::class, 'updateInstructorProfile']);
 
-        //short Links  
+        //short Links
         Route::post('/vaildate_link', [CourseController::class, 'validateLink']);
         Route::get('/generate_link/{length}', [CourseController::class, 'generateLink']);
-        Route::post('/update_link', [CourseController::class, 'updateCourseLink']);        
+        Route::post('/update_link', [CourseController::class, 'updateCourseLink']);
 
         //Course routes
         Route::post('/create_new_course', [CourseController::class, 'createCourse']);
