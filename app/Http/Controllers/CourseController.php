@@ -48,8 +48,12 @@ class CourseController extends Controller
             ], 200);
         }
 
+<<<<<<< HEAD
         return response([
             'message' => 'No course with this link was found',
+=======
+        return response(['message' => 'No course with this link was found',
+>>>>>>> 8011c1d4d8124569cb82a38c8b701812ebcbf8a9
             'data' => ''
         ], 404);
     }
@@ -64,7 +68,7 @@ class CourseController extends Controller
         if ($validated->fails()) {
             return response(['error' => $validated->errors()->all()], 422);
         }
-        
+
         Course::where(['id' => $request->course_id])->update([
             'link' => $request->link
         ]);
