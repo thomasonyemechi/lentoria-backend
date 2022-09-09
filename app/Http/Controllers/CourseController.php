@@ -48,12 +48,8 @@ class CourseController extends Controller
             ], 200);
         }
 
-<<<<<<< HEAD
         return response([
             'message' => 'No course with this link was found',
-=======
-        return response(['message' => 'No course with this link was found',
->>>>>>> 8011c1d4d8124569cb82a38c8b701812ebcbf8a9
             'data' => ''
         ], 404);
     }
