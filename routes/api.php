@@ -104,6 +104,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         Route::post('/add_type', [TypeController::class, 'createCourseType']);
         Route::post('/update_type', [TypeController::class, 'updateType']);
 
+        Route::get('/under_review_courses', [PublishController::class, 'fetchCoursesUnderReview']);
+
+
     });
 
 

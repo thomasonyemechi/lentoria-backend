@@ -49,7 +49,8 @@ class CourseController extends Controller
         }
 
         return response([
-            'message' => 'No course with this link was found'
+            'message' => 'No course with this link was found',
+            'data' => ''
         ], 404);
     }
 

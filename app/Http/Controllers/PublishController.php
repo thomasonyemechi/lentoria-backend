@@ -13,9 +13,14 @@ use Illuminate\Support\Facades\Validator;
 class PublishController extends Controller
 {
 
+    function approveCourse()
+    {
+        
+    }
+
     function fetchCoursesUnderReview()
     {
-        $courses = Course::where(['published' => 5])->orderby('id', 'desc')->paginate(150);
+        $courses = Course::with(['user:id,firstname,lastname'])->where(['published' => 5])->orderby('updated_at', 'desc')->paginate(150);
         return response([
             'data' => $courses
         ], 200);
