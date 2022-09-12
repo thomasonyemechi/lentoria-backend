@@ -21,7 +21,8 @@ class LectureController extends Controller
         }
 
         $lecture = Lecture::find($request->lecture_id);
-        $lecture->update(['main_content' => $request->uri,
+        $lecture->update([
+            'main_content' => $request->uri,
             'duration' => $request->duration,
         ]);
 
@@ -120,6 +121,24 @@ class LectureController extends Controller
 
         return response([
             'message' => 'Lecture has be ordered sucessfully',
+        ], 200);
+    }
+
+    public function updateTextcontent(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'lecture_id' => 'required|exists:lectures,id',
+            'content' => 'required',
+        ]);
+        if ($validate->fails()) {
+            return response(['errors' => $validate->errors()->all()], 422);
+        }
+        $lecture = Lecture::find($request->lecture_id);
+        $lecture->update([
+            'main_content' => $request->content,
+        ]);
+        return response([
+            'message' => 'Lecture content added sucessfully',
         ], 200);
     }
 

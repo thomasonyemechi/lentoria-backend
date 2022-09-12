@@ -151,6 +151,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         Route::get('fetch_lectures/{section_id}', [LectureController::class, 'fetchLectures']);
         Route::post('order_lecture', [LectureController::class, 'orderLecture']);
         Route::post('update_lecture_video', [LectureController::class, 'updateVideoLink']);
+        Route::post('update_lecture_text', [LectureController::class, 'updateTextcontent']);
         Route::post('update_lecture', [LectureController::class, 'updateLecture']);
         Route::post('get_video_link', [LectureController::class, 'checkVideoLink']);
 
