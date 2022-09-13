@@ -164,9 +164,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         Route::get('fetch_lectures/{section_id}', [LectureController::class, 'fetchLectures']);
         Route::post('order_lecture', [LectureController::class, 'orderLecture']);
         Route::post('update_lecture_video', [LectureController::class, 'updateVideoLink']);
+<<<<<<< HEAD
         Route::post('update_lecture_code', [LectureController::class, 'updateLectureCodes']);
         Route::post('update_lecture_article', [LectureController::class, 'updateLectureArticle']);
         Route::post('update_lecture_image', [LectureController::class, 'updateLectureImage']);
+=======
+        Route::post('update_lecture_text', [LectureController::class, 'updateTextcontent']);
+>>>>>>> cba2ced22f8dd420a189285bff9d5ff51669f98e
         Route::post('update_lecture', [LectureController::class, 'updateLecture']);
         Route::post('get_video_link', [LectureController::class, 'checkVideoLink']);
 
