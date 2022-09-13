@@ -10,6 +10,75 @@ class LectureController extends Controller
 {
 
 
+    function updateLectureImage(Request $request)
+    {
+        $val = Validator::make($request->all(), [
+            'lecture_id' => 'required|exists:lectures,id',
+            'image' => 'required|image|mimes:jpeg,jpg,png,gif|dimensions:max_width=1500,max_height=844',
+        ]);
+        if ($val->fails()) {
+            return response(['errors' => $val->errors()->all()], 422);
+        }
+        $lecture = Lecture::find($request->lecture_id);
+        $old_image = $lecture->image;
+        $file = $request->file('image');
+        $imageName = $file->hashName();
+        $destinationPath = public_path() . '/assets/uploads/';
+        if (($old_image != '' || $old_image != null) && file_exists($destinationPath . $old_image)) {
+            unlink($destinationPath . $old_image);
+        }
+        $file->move($destinationPath, $imageName);
+        $lecture->update([
+            'image' => $imageName
+        ]);
+        return response([
+            'message' => 'Image has been uploded sucessfully'
+        ], 200);
+    }
+    function updateLectureArticle(Request $request)
+    {
+        $val = Validator::make($request->all(), [
+            'lecture_id' => 'required|exists:lectures,id',
+            'text' => 'required|string'
+        ]);
+        if ($val->fails()) {
+            return response(['errors' => $val->errors()->all()], 422);
+        }
+        Lecture::where('id', $request->lecture_id)->update([
+            'text' => $request->text
+        ]);
+        return response([
+            'message' => 'Article has been uploaded sucessfully'
+        ], 200);
+    }
+
+    
+
+
+    function updateLectureCodes(Request $request)
+    {
+        $val = Validator::make($request->all(), [
+            'lecture_id' => 'required|exists:lectures,id',
+            'code' => 'required|string',
+            'language' => 'required|string'
+        ]);
+        if ($val->fails()) {
+            return response(['errors' => $val->errors()->all()], 422);
+        }
+        $code = [
+            'language' => $request->language,
+            'code' => $request->code
+        ];
+        Lecture::where('id', $request->lecture_id)->update([
+            'code' => json_encode($code)
+        ]);
+        return response([
+            'messge' => 'Code has been uploaded sucessfully'
+        ], 200);
+    }
+
+
+
     function updateVideoLink(Request $request)
     {
         $val = Validator::make($request->all(), [

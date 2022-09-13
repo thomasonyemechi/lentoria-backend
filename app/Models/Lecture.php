@@ -15,6 +15,6 @@ class Lecture extends Model
     }
 
     protected $fillable = [
-        'section_id', 'title', 'description', 'main_content', 'order', 'duration',
+        'section_id', 'title', 'description', 'main_content', 'order', 'duration', 'image', 'code', 'text'
     ];
 }
