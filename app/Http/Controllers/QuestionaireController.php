@@ -111,8 +111,6 @@ class QuestionaireController extends Controller
     function saveUserAnswers(Request $request) 
     {
         $val = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'string',
             'questions' => 'required',
             'type' => 'required'
         ]);
@@ -122,8 +120,7 @@ class QuestionaireController extends Controller
         }
 
         QuestionaireAnswer::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'user_id' => auth()->user()->id,
             'total_questions' => count($request->questions),
             'data' => json_encode($request->questions),
             'question_type' => $request->question_type
