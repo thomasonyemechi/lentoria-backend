@@ -45,6 +45,23 @@ class VirtualClassController extends Controller
         ], 200);
     }
 
+    function fetchClassContentBySection($section_id) 
+    {
+        $contents = VirtualClassroom::where(['section_id' => $section_id])->paginate(100);
+        return response([
+            'data' => $contents
+        ], 200);
+    }
+
+
+    function fetchClassContentByLecture($lecture_id)
+    {
+        $contents = VirtualClassroom::where(['lecture_id' => $lecture_id])->paginate(100);
+        return response([
+            'data' => $contents
+        ], 200);
+    }
+
     function contentRet($sn, $lecture)
     {
         $val = $lecture->main_content;
