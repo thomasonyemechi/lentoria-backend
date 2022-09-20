@@ -70,7 +70,7 @@ class CourseController extends Controller
         ]);
 
         return response([
-            'message' => 'Short link has been updated sucessfully'
+            'message' => 'Short link has been updated successfully'
         ]);
     }
 
@@ -192,7 +192,8 @@ class CourseController extends Controller
 
     public function fetchCourseLearners($slug)
     {
-        return response(['data' => Course::with('category')->where('slug', $slug)->get()]);
+        $id = Course::where('slug',$slug)->value('id');
+        return response(['data' => CourseInfo::where('course_id', $id)->get()]);
     }
 
     public function fetchMyCourse()
