@@ -32,10 +32,11 @@ class LectureController extends Controller
             'image' => $imageName
         ]);
         return response([
-            'message' => 'Image has been uploded sucessfully'
+            'message' => "Image has been uploaded successfully"
         ], 200);
     }
-    function updateLectureArticle(Request $request)
+
+    public function updateLectureArticle(Request $request)
     {
         $val = Validator::make($request->all(), [
             'lecture_id' => 'required|exists:lectures,id',
@@ -44,15 +45,13 @@ class LectureController extends Controller
         if ($val->fails()) {
             return response(['errors' => $val->errors()->all()], 422);
         }
-        Lecture::where('id', $request->lecture_id)->update([
+        Lecture::where('id', operator: $request->lecture_id)->update([
             'text' => $request->text
         ]);
         return response([
             'message' => 'Article has been uploaded sucessfully'
         ], 200);
     }
-
-    
 
 
     function updateLectureCodes(Request $request)
@@ -73,10 +72,9 @@ class LectureController extends Controller
             'code' => json_encode($code)
         ]);
         return response([
-            'messge' => 'Code has been uploaded sucessfully'
+            'message' => 'Code has been uploaded successfully'
         ], 200);
     }
-
 
 
     function updateVideoLink(Request $request)
@@ -113,6 +111,7 @@ class LectureController extends Controller
         $uri = Lecture::find($request->lecture_id)->value('main_content');
         return response(['data' => $uri], 200);
     }
+
     public function addLecture(Request $request)
     {
         $val = Validator::make($request->all(), [
@@ -133,6 +132,7 @@ class LectureController extends Controller
 
         return response(['message' => 'Lecture has been created successfully', 'id' => $lecture->id], 200);
     }
+
     public function updateLecture(Request $request)
     {
         $val = Validator::make($request->all(), [
@@ -203,7 +203,7 @@ class LectureController extends Controller
             return response(['errors' => $validate->errors()->all()], 422);
         }
         $lecture = Lecture::find($request->lecture_id);
-        $lecture->update([
+        $lecture->update(attributes: [
             'main_content' => $request->content,
         ]);
         return response([

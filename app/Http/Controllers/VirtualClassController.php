@@ -29,7 +29,7 @@ class VirtualClassController extends Controller
             'section_id' => $lecture->section_id,
             'lecture_id' => $lecture->id,
             'user_id' => auth()->user()->id,
-            'content' => $request->content, 
+            'content' => $request->content,
             'comment' => $comment,
         ]);
 
@@ -48,7 +48,7 @@ class VirtualClassController extends Controller
         ], 200);
     }
 
-    function fetchClassContentBySection($section_id) 
+    function fetchClassContentBySection($section_id)
     {
         $contents = VirtualClassroom::where(['section_id' => $section_id])->paginate(100);
         return response([
@@ -76,10 +76,15 @@ class VirtualClassController extends Controller
     function contentRet($sn, $lecture)
     {
         $val = $lecture->main_content;
-        if($sn == 'video'){   $val = $lecture->main_content;   }
-        elseif($sn == 'image') { $val = $lecture->image; }
-        elseif($sn == 'text') { $val = $lecture->text; }
-        elseif($sn == 'code') { $val = $lecture->code; }
+        if ($sn == 'video') {
+            $val = $lecture->main_content;
+        } elseif ($sn == 'image') {
+            $val = $lecture->image;
+        } elseif ($sn == 'text') {
+            $val = $lecture->text;
+        } elseif ($sn == 'code') {
+            $val = $lecture->code;
+        }
         return $val;
     }
 
@@ -92,7 +97,6 @@ class VirtualClassController extends Controller
     //     elseif($sn == 'code') { $val = 4; }
     //     return $val;
     // }
-
 
     /////forum controller
 

@@ -38,8 +38,8 @@ class SectionController extends Controller
 
     public function getSectionsBySlug($slug)
     {
-        $cid = Course::query()->where('slug', $slug)->pluck('id');
-        $section = Section::query()->where('course_id', $cid)->with('lectures')->orderBy('order', 'ASC')->get();
+        $cid = Course::query()->where('slug', $slug)->value('id');
+        $section = Section::query()->where('course_id', $cid)->with('lectures:id,image,main_content,duration,section_id,title')->orderBy('order', 'ASC')->get();
         return response(['data' => $section], 200);
     }
 

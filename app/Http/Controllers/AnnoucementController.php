@@ -18,8 +18,8 @@ class AnnoucementController extends Controller
             return response(['errors' => $validated->errors()->all()], 422);
         }
         Annoucement::create([
-            'course_id' => $request->course_id,
             'title' =>$request->title,
+            'course_id' => $request->course_id,
             'content' =>$request->content,
         ]);
         return response(['message' => 'Annoucement Added'], 200);

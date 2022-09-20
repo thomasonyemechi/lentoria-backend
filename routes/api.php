@@ -13,7 +13,6 @@ use App\Http\Controllers\PublishController;
 use App\Http\Controllers\QuestionaireController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SectionController;
-use Illuminate\Http\Request;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TypeController;
@@ -55,13 +54,12 @@ Route::get('/get_topic_by_slug/{slug}', [TopicController::class, 'findTopicbySlu
 Route::get('/get_category_by_slug/{slug}', [CategoryController::class, 'findCategoryBySlug']);
 
 
-Route::get('/fetch_affilate_questions', [QuestionaireController::class, 'fetchAffilateQuestions']);
+Route::get('/fetch_affiliate_questions', [QuestionaireController::class, 'fetchAffiliateQuestions']);
 Route::get('/fetch_instructor_questions', [QuestionaireController::class, 'fetchInstructorQuestions']);
 
 
-
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
-    
+
 
     ///become instructor
     Route::post('/activate_from_wallet', [PackageController::class, 'activateFromWallet']);
@@ -69,6 +67,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('/fetch_all_instructor', [InstructorController::class, 'fetchAllInstructor']);
     Route::get('/fetch_single_instructor', [InstructorController::class, 'fetchSingleInstructor']);
     Route::get('/instructor_info', [InstructorController::class, 'getInstructorProfile']);
+    Route::post('/submit_questionnaire', [QuestionaireController::class, 'saveUserAnswers']);
 
 
     //Wishlist
@@ -85,7 +84,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::post('card_purchase', [TransactionController::class, 'buyCourseWithCard']);
 
 
-
     ///other routes
     Route::get('balance/{live_id}', [TransactionController::class, 'fetchLiveBalance']);
 
@@ -98,12 +96,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
 
 
     Route::group(['middleware' => ['admin']], function () {
-        //questionaires....
+        //questionnaires....
         Route::post('/add_questionaire', [QuestionaireController::class, 'addQuestion']);
         Route::post('/update_questionaire', [QuestionaireController::class, 'updateQuestion']);
         Route::get('/fetch_questionaire', [QuestionaireController::class, 'fetchQuestions']);
 
-        
+
         // category routes
         Route::post('/add_category', [CategoryController::class, 'create']);
         Route::post('/category', [CategoryController::class, 'update']);

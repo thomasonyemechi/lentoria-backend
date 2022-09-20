@@ -11,7 +11,7 @@ class QuestionaireController extends Controller
 {
     //
 
-    function addQuestion(Request $request)
+    public function addQuestion(Request $request)
     {
         $val = Validator::make($request->all(), [
             'question' => 'required|string|min:3',
@@ -41,7 +41,7 @@ class QuestionaireController extends Controller
     }
 
 
-    function updateQuestion(Request $request)
+    public function updateQuestion(Request $request)
     {
         $val = Validator::make($request->all(), [
             'question' => 'required|string|min:3',
@@ -67,12 +67,12 @@ class QuestionaireController extends Controller
         ]);
 
         return response([
-            'message' => 'Question has been updated scuessfully'
+            'message' => 'Question has been updated successfully'
         ], 200);
     }
 
 
-    function fetchQuestions(Request $request)
+    public function fetchQuestions(Request $request)
     {
         $questions = Questionaire::paginate(100);
 
@@ -82,7 +82,7 @@ class QuestionaireController extends Controller
     }
 
 
-    function updateQuestionStatus(Request $request)
+    public function updateQuestionStatus(Request $request)
     {
         $val = Validator::make($request->all(), [
             'questions_ids' => 'required',
@@ -93,22 +93,20 @@ class QuestionaireController extends Controller
             return response(['errors' => $val->errors()->all()], 422);
         }
 
-        foreach($request->question_ids as $ques)
-        {
+        foreach ($request->question_ids as $ques) {
             Questionaire::where('id', $ques)->update([
                 'status' => $request->status
             ]);
         }
 
         return response([
-            'message' => 'Questions have been uidpated sucessfully'
+            'message' => 'Questions have been updated successfully'
         ], 200);
-        
+
     }
 
 
-
-    function saveUserAnswers(Request $request) 
+    public function saveUserAnswers(Request $request)
     {
         $val = Validator::make($request->all(), [
             'questions' => 'required',
@@ -123,14 +121,13 @@ class QuestionaireController extends Controller
             'user_id' => auth()->user()->id,
             'total_questions' => count($request->questions),
             'data' => json_encode($request->questions),
-            'question_type' => $request->question_type
+            'question_type' => $request->type
         ]);
         return response([
-            'message' => 'Answers have been saved sucessfully'
-        ], 200);       
+            'message' => 'Answers have been saved successfully'
+        ], 200);
 
     }
-
 
 
     function fetchUsersAnswerAll()
@@ -150,7 +147,7 @@ class QuestionaireController extends Controller
     }
 
 
-    function fetchAffilateQuestions()
+    function fetchAffiliateQuestions()
     {
         $questions = Questionaire::where(['status' => 1, 'type' => 1])->get();
         return response([
