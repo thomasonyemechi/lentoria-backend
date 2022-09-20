@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
+use App\Models\ForumMessage;
 use App\Models\Lecture;
+use App\Models\Transaction;
 use App\Models\VirtualClassroom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -53,6 +56,14 @@ class VirtualClassController extends Controller
         ], 200);
     }
 
+    function fetchClassStudents($course_id)
+    {
+        $students = Transaction::with(['user:id,firstname,lastname'])->where(['course_id' => $course_id])->paginate(500);
+        return response([
+            'data' => $students
+        ], 200);
+    }
+
 
     function fetchClassContentByLecture($lecture_id)
     {
@@ -81,4 +92,52 @@ class VirtualClassController extends Controller
     //     elseif($sn == 'code') { $val = 4; }
     //     return $val;
     // }
+
+
+    /////forum controller
+
+    function sendMessage(Request $request)
+    {
+        $val = Validator::make($request->all(), [
+            'course_id' => 'required|exists:courses,id',
+            'message' => 'string|required',
+        ]);
+        if ($val->fails()) {
+            return response(['errors' => $val->errors()->all()], 422);
+        }
+        $message = ForumMessage::create([
+            'message' => trim($request->message),
+            'sender_id' => auth()->user()->id,
+            'reply' => $request->reply,
+            'course_id' => $request->course_id
+        ]);
+        if($request->reply) {
+            $title = auth()->user()->firstname.' '.auth()->user()->lastname.' replied to your message';
+            $course = Course::find($request->course_id, ['id', 'title']);
+            $message = 'Your message was replied to in a '.$course->title.' Forum';
+            $this->notify($request->reply, $title, $message);
+        }
+        return response([
+            'data' => $message,
+            'message' => 'Message posted sucessfuly'
+        ], 200);
+    }
+
+
+    function fetchAllMessages($course_id)
+    {
+        $allmessages = ForumMessage::with(['user:id,firstname,lastname', 'reply'])->where(['course_id' => $course_id])->paginate(250);
+        return response([
+            'data' => $allmessages
+        ], 200);
+    }
+
+
+    function mySentMessage()
+    {
+        $mymessages = ForumMessage::with(['course:id,title'])->where(['sender_id' => auth()->user()->id ])->paginate(150);
+        return response([
+            'data' => $mymessages
+        ], 200);
+    }
 }
