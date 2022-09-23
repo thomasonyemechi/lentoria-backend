@@ -17,4 +17,8 @@ class Lecture extends Model
     protected $fillable = [
         'section_id', 'title', 'description', 'main_content', 'order', 'duration', 'image', 'code', 'text'
     ];
+
+    function section(){
+        return $this->belongsTo(Section::class);
+    }
 }

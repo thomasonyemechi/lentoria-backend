@@ -16,6 +16,7 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TypeController;
+use App\Http\Controllers\VirtualClassController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
@@ -168,6 +169,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         Route::post('update_lecture_text', [LectureController::class, 'updateTextcontent']);
         Route::post('update_lecture', [LectureController::class, 'updateLecture']);
         Route::post('get_video_link', [LectureController::class, 'checkVideoLink']);
+        Route::get('get_lecture_code/{lecture_id}',[LectureController::class,'getLectureCodes']);
+        Route::get('get_lecture_text/{lecture_id}',[LectureController::class,'getLectureText']);
 
         //materials
         Route::post('add_materials', [MaterialController::class, 'createMaterial']);
@@ -175,9 +178,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         Route::get('get_material/{id}', [MaterialController::class, 'getMaterial']);
         Route::post('update_material', [MaterialController::class, 'updateMaterial']);
 
-        //annoucements
+        //announcements
         Route::post('add_announcement', [AnnoucementController::class, 'createAnnouncement']);
         Route::get('get_announcements/{id}', [AnnoucementController::class, 'getAnnouncements']);
+
+
+        //virtual_class
+        Route::post('push_to_classroom',[VirtualClassController::class,'addContentToClass']);
+        Route::get('get_class_comments/{lecture_id}',[VirtualClassController::class,'getComments']);
 
 
         ///

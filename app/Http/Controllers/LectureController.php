@@ -219,4 +219,26 @@ class LectureController extends Controller
         $file->move($destinationPath, $fileName);
         return response(['data' => $request->all()], 200);
     }
+
+    public function getLectureCodes($lecture_id)
+    {
+        $validate = Validator::make(['lecture_id'=>$lecture_id],[
+            'lecture_id'=>'required|exists:lectures,id',
+        ]);
+
+        if ($validate->fails()){return response(['errors'=>$validate->errors()->all()],422);}
+
+        return response(['data'=>Lecture::find($lecture_id)->code],200);
+
+    }
+
+    public function getLectureText($lecture_id)
+    {
+        $validate = Validator::make(['lecture_id'=>$lecture_id],[
+            'lecture_id'=>'required|exists:lectures,id',
+        ]);
+        if($validate->fails()){return response(['errors'=>$validate->errors()->all()],422);}
+
+        return response(['data'=>Lecture::find($lecture_id)->text],200);
+    }
 }
