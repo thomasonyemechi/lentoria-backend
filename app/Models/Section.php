@@ -11,12 +11,15 @@ class Section extends Model
 {
     use HasFactory;
 
-    protected $guarded =[];
+    protected $guarded = [];
 
-    public function course(){
+    public function course()
+    {
         return $this->belongsTo(Course::class);
     }
-    public function lectures(){
+
+    public function lectures()
+    {
         return $this->hasMany(Lecture::class);
     }
 }

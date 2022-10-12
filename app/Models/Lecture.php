@@ -10,15 +10,17 @@ class Lecture extends Model
 {
     use HasFactory;
 
-    public function materials(){
+    protected $fillable = [
+        'section_id', 'title', 'description', 'main_content', 'order', 'duration', 'image', 'code', 'text',
+    ];
+
+    public function materials()
+    {
         return $this->hasMany(Material::class);
     }
 
-    protected $fillable = [
-        'section_id', 'title', 'description', 'main_content', 'order', 'duration', 'image', 'code', 'text'
-    ];
-
-    function section(){
+    function section()
+    {
         return $this->belongsTo(Section::class);
     }
 }

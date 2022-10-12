@@ -14,7 +14,7 @@ class VirtualClassController extends Controller
         $val = Validator::make($request->all(), [
             'lecture_id' => 'required|exists:lectures,id',
             'comment' => 'string',
-            'content' => 'string'
+            'content' => 'string',
         ]);
         if ($val->fails()) {
             return response(['errors' => $val->errors()->all()], 422);
@@ -35,32 +35,6 @@ class VirtualClassController extends Controller
         ], 200);
     }
 
-
-    function fetchClassContent($course_id)
-    {
-        $contents = VirtualClassroom::where(['course_id' => $course_id])->paginate(100);
-        return response([
-            'data' => $contents
-        ], 200);
-    }
-
-    function fetchClassContentBySection($section_id)
-    {
-        $contents = VirtualClassroom::where(['section_id' => $section_id])->paginate(100);
-        return response([
-            'data' => $contents
-        ], 200);
-    }
-
-
-    function fetchClassContentByLecture($lecture_id)
-    {
-        $contents = VirtualClassroom::where(['lecture_id' => $lecture_id])->paginate(100);
-        return response([
-            'data' => $contents
-        ], 200);
-    }
-
     function contentRet($sn, $lecture)
     {
         $val = $lecture->main_content;
@@ -76,6 +50,30 @@ class VirtualClassController extends Controller
         return $val;
     }
 
+    function fetchClassContent($course_id)
+    {
+        $contents = VirtualClassroom::where(['course_id' => $course_id])->paginate(100);
+        return response([
+            'data' => $contents,
+        ], 200);
+    }
+
+    function fetchClassContentBySection($section_id)
+    {
+        $contents = VirtualClassroom::where(['section_id' => $section_id])->paginate(100);
+        return response([
+            'data' => $contents,
+        ], 200);
+    }
+
+    function fetchClassContentByLecture($lecture_id)
+    {
+        $contents = VirtualClassroom::where(['lecture_id' => $lecture_id])->paginate(100);
+        return response([
+            'data' => $contents,
+        ], 200);
+    }
+
     // function content($sn)
     // {
     //     $val = 1;
@@ -88,11 +86,15 @@ class VirtualClassController extends Controller
 
     public function getComments($lecture_id)
     {
-        $validate = Validator::make(['lecture_id'=>$lecture_id],[
-            'lecture_id'=>'required|exists:lectures,id',
+        $validate = Validator::make(['lecture_id' => $lecture_id], [
+            'lecture_id' => 'required|exists:lectures,id',
         ]);
-        if($validate->fails()){return response(['errors'=>$validate->errors()->all()],422);}
+        if ($validate->fails()) {
+            return response(['errors' => $validate->errors()->all()], 422);
+        }
 
-        return response(["data"=>VirtualClassroom::where(['lecture_id' => $lecture_id,'content' => 'comment'])->orderBy('id','ASC')->take(10)->get(['comment','created_at'])]);
+        return response(["data" => VirtualClassroom::where(['lecture_id' => $lecture_id, 'content' => 'comment'])
+            ->orderBy('id', 'ASC')->take(10)
+            ->get(['comment', 'created_at'])]);
     }
 }
