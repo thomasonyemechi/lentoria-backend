@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\ForumMessage;
 use App\Models\Lecture;
+use App\Models\Schedule;
 use App\Models\Transaction;
 use App\Models\VirtualClassroom;
 use Illuminate\Http\Request;
@@ -143,5 +144,79 @@ class VirtualClassController extends Controller
         return response([
             'data' => $mymessages
         ], 200);
+    }
+
+
+    function addSchedule(Request $request)
+    {
+        $val = Validator::make($request->all(), [
+            'course_id' => 'required|exists:courses,id',
+            'ymd' => 'required|string',
+            'starts' => 'required|string',
+            'ends' => 'required|string'
+        ]);
+        if ($val->fails()) {
+            return response(['errors' => $val->errors()->all()], 422);
+        }
+
+        $ymd = date('ymd',strtotime($request->ymd));
+
+        $ck = Schedule::where(['ymd' => $ymd, 'course_id' => $request->course_id])->count();
+        if($ck > 0) { 
+            return response([
+                'message' => 'A schedule already exists for this day'
+            ], 403);
+        }
+
+        Schedule::create([
+            'course_id' => $request->course_id,
+            'ymd' => $ymd,
+            'starts' => $request->starts,
+            'ends' => $request->ends
+        ]);
+
+        return response([
+            'message' => 'Schedule has been created sucessfully'
+        ]);
+    }
+
+
+    function editSchedule(Request $request)
+    {
+        $val = Validator::make($request->all(), [
+            'schedule_id' => 'required|exists:schedules,id',
+            'ymd' => 'required|string',
+            'starts' => 'required|string',
+            'ends' => 'required|string'
+        ]);
+        if ($val->fails()) {
+            return response(['errors' => $val->errors()->all()], 422);
+        }
+        $schedule = Schedule::find($request->schedule_id);
+        Schedule::where('id' , $request->schedule_id)->update([
+            'starts' => $request->starts,
+            'ends' => $request->ends
+        ]);
+
+
+        return response([
+            'schedule has been updated sucessfully'
+        ], 200);
+    }
+
+    function deleteSchedule(Request $request)
+    {
+        $val = Validator::make($request->all(), [
+            'schedule_id' => 'required|exists:schedules,id',
+        ]);
+        if ($val->fails()) {
+            return response(['errors' => $val->errors()->all()], 422);
+        }
+
+        Schedule::where('id', $request->schedule_id)->delete();
+        
+        return response([
+            'message' => 'Schedule has been deleted sucessfully'
+        ],);
     }
 }
