@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
-use App\Models\ForumMessage;
 use App\Models\Lecture;
 use App\Models\Schedule;
 use App\Models\Transaction;
@@ -13,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class VirtualClassController extends Controller
 {
-    function addContentToclass(Request $request)
+    function addContentToClass(Request $request)
     {
         $val = Validator::make($request->all(), [
             'lecture_id' => 'required|exists:lectures,id',
@@ -36,7 +34,6 @@ class VirtualClassController extends Controller
 
         return response([
             'message' => 'Content has been posted to classroom',
-            'data' => $content
         ], 200);
     }
 
@@ -54,14 +51,6 @@ class VirtualClassController extends Controller
         $contents = VirtualClassroom::where(['section_id' => $section_id])->paginate(100);
         return response([
             'data' => $contents
-        ], 200);
-    }
-
-    function fetchClassStudents($course_id)
-    {
-        $students = Transaction::with(['user:id,firstname,lastname'])->where(['course_id' => $course_id])->paginate(500);
-        return response([
-            'data' => $students
         ], 200);
     }
 
@@ -99,51 +88,14 @@ class VirtualClassController extends Controller
     //     return $val;
     // }
 
-    /////forum controller
-
-    function sendMessage(Request $request)
+    public function getComments($lecture_id)
     {
-        $val = Validator::make($request->all(), [
-            'course_id' => 'required|exists:courses,id',
-            'message' => 'string|required',
+        $validate = Validator::make(['lecture_id'=>$lecture_id],[
+            'lecture_id'=>'required|exists:lectures,id',
         ]);
-        if ($val->fails()) {
-            return response(['errors' => $val->errors()->all()], 422);
-        }
-        $message = ForumMessage::create([
-            'message' => trim($request->message),
-            'sender_id' => auth()->user()->id,
-            'reply' => $request->reply,
-            'course_id' => $request->course_id
-        ]);
-        if($request->reply) {
-            $title = auth()->user()->firstname.' '.auth()->user()->lastname.' replied to your message';
-            $course = Course::find($request->course_id, ['id', 'title']);
-            $message = 'Your message was replied to in a '.$course->title.' Forum';
-            $this->notify($request->reply, $title, $message);
-        }
-        return response([
-            'data' => $message,
-            'message' => 'Message posted sucessfuly'
-        ], 200);
-    }
+        if($validate->fails()){return response(['errors'=>$validate->errors()->all()],422);}
 
-
-    function fetchAllMessages($course_id)
-    {
-        $allmessages = ForumMessage::with(['user:id,firstname,lastname', 'reply'])->where(['course_id' => $course_id])->paginate(250);
-        return response([
-            'data' => $allmessages
-        ], 200);
-    }
-
-
-    function mySentMessage()
-    {
-        $mymessages = ForumMessage::with(['course:id,title'])->where(['sender_id' => auth()->user()->id ])->paginate(150);
-        return response([
-            'data' => $mymessages
-        ], 200);
+        return response(["data"=>VirtualClassroom::where(['lecture_id' => $lecture_id,'content' => 'comment'])->orderBy('id','ASC')->take(10)->get(['comment','created_at'])]);
     }
 
 
