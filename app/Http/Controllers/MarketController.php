@@ -43,5 +43,20 @@ class MarketController extends Controller
         if ($val->fails()) {
             return response(['errors' => $val->errors()->all()], 422);
         }
+
+        UserMarket::where('id', $request->item_id)->delete();
+
+        return response([
+            'message' => 'Item has been removed from list'
+        ], 200);
+    }
+
+
+    function fetchMarketList()
+    {
+        $items = UserMarket::with(['course'])->where('user_id', auth()->user()->id)->limit(20)->get();
+        return response([
+            'data' => $items
+        ], 200);
     }
 }

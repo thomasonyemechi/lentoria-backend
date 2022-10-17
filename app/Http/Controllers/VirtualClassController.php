@@ -111,9 +111,9 @@ class VirtualClassController extends Controller
             return response(['errors' => $val->errors()->all()], 422);
         }
 
-        $ymd = date('ymd',strtotime($request->ymd));
+        //$ymd = date('ymd',strtotime($request->ymd));
 
-        $ck = Schedule::where(['ymd' => $ymd, 'course_id' => $request->course_id])->count();
+        $ck = Schedule::where(['ymd' => $request->ymd, 'course_id' => $request->course_id])->count();
         if($ck > 0) { 
             return response([
                 'message' => 'A schedule already exists for this day'
@@ -122,7 +122,7 @@ class VirtualClassController extends Controller
 
         Schedule::create([
             'course_id' => $request->course_id,
-            'ymd' => $ymd,
+            'ymd' => $request->ymd,
             'starts' => $request->starts,
             'ends' => $request->ends
         ]);
@@ -150,9 +150,8 @@ class VirtualClassController extends Controller
             'ends' => $request->ends
         ]);
 
-
         return response([
-            'schedule has been updated sucessfully'
+            'message' => 'schedule has been updated sucessfully'
         ], 200);
     }
 
@@ -170,5 +169,13 @@ class VirtualClassController extends Controller
         return response([
             'message' => 'Schedule has been deleted sucessfully'
         ],);
+    }
+
+    function fetchSchedule($course_id)
+    {
+        $schedules = Schedule::where('course_id', $course_id)->get();
+        return response([
+            'data' => $schedules
+        ], 200);
     }
 }
