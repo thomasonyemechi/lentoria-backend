@@ -7,6 +7,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\LectureController;
+use App\Http\Controllers\MarketController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PublishController;
@@ -56,6 +57,7 @@ Route::get('/get_category_by_slug/{slug}', [CategoryController::class, 'findCate
 
 
 Route::get('/fetch_affiliate_questions', [QuestionaireController::class, 'fetchAffiliateQuestions']);
+Route::get('/fetch_instructor_questions', [QuestionaireController::class, 'fetchInstructorQuestions']);
 Route::get('/fetch_instructor_questions', [QuestionaireController::class, 'fetchInstructorQuestions']);
 
 
@@ -188,6 +190,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         Route::get('get_class_comments/{lecture_id}',[VirtualClassController::class,'getComments']);
 
 
+        //schedules
+        Route::post('add_course_schedule',[VirtualClassController::class,'addSchedule']);
+        Route::post('update_course_schedule',[VirtualClassController::class,'editSchedule']);
+        Route::post('delete_course_schedule',[VirtualClassController::class,'deleteSchedule']);
+        Route::get('get_course_schedule/{course_id}',[VirtualClassController::class,'fetchSchedule']);
+
+        //market
+        Route::post('add_item_to_market',[MarketController::class,'addItemToMarket']);
+        Route::post('remove_item_from_market',[MarketController::class,'removeItemFromList']);
+        Route::post('fetch_my_market',[MarketController::class,'fetchMarketList']);
         ///
         Route::post('publish_course', [PublishController::class, 'publishCourse']);
 
