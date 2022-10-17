@@ -10,6 +10,7 @@ class MarketController extends Controller
 {
     function addItemToMarket(Request $request)
     {
+        
         $val = Validator::make($request->all(), [
             'course_id' => 'required|exists:courses,id',
         ]);
