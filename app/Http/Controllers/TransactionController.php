@@ -210,7 +210,7 @@ class TransactionController extends Controller
 
     function fetchLiveBalance($live_id)
     {
-        $res = Http::asForm()->post(env('LINK') . '?balance=' . $live_id,);
+        $res = Http::asForm()->post(env('LINK') . '?balance=' . $live_id);
         return json_decode($res);
     }
 }
