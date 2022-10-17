@@ -200,9 +200,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         Route::post('add_item_to_market',[MarketController::class,'addItemToMarket']);
         Route::post('remove_item_from_market',[MarketController::class,'removeItemFromList']);
         Route::post('fetch_my_market',[MarketController::class,'fetchMarketList']);
-
-        
-
         ///
         Route::post('publish_course', [PublishController::class, 'publishCourse']);
 
