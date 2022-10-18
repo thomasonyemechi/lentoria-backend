@@ -44,6 +44,8 @@ class PublishController extends Controller
         //     ], 400);
         // }
 
+        
+
         if($course->user_id != $user->id){
             return response(['message' => 'You are trying to upload a course that does not belong to you'], 401);
         }
