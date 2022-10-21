@@ -13,9 +13,12 @@ use Illuminate\Support\Facades\Validator;
 class PublishController extends Controller
 {
 
-    function approveCourse()
+    function approveCourse(Request $request)
     {
-
+        $courses = Course::where('id', $request->course_id)->update(['published' => 1]);
+        return response([
+            'message' => 'Course Has been approved sucessfully',
+        ], 200);
     }
 
     function fetchCoursesUnderReview()
@@ -177,7 +180,7 @@ class PublishController extends Controller
             $errs[] = 'Course image not found';
         }
 
-        if ($course->desctiption == '') {
+        if ($course->description == '') {
             $errs[] = 'Course description is too short';
         }
 
