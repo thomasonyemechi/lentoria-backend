@@ -13,9 +13,12 @@ use Illuminate\Support\Facades\Validator;
 class PublishController extends Controller
 {
 
-    function approveCourse()
+    function approveCourse(Request $request)
     {
-
+        $courses = Course::where('id', $request->course_id)->update(['published' => 1]);
+        return response([
+            'message' => 'Course Has been approved sucessfully',
+        ], 200);
     }
 
     function fetchCoursesUnderReview()
@@ -45,7 +48,9 @@ class PublishController extends Controller
         //     ], 400);
         // }
 
-        if ($course->user_id != $user->id) {
+        
+
+        if($course->user_id != $user->id){
             return response(['message' => 'You are trying to upload a course that does not belong to you'], 401);
         }
 
@@ -175,7 +180,7 @@ class PublishController extends Controller
             $errs[] = 'Course image not found';
         }
 
-        if ($course->desctiption == '') {
+        if ($course->description == '') {
             $errs[] = 'Course description is too short';
         }
 

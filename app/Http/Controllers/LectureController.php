@@ -14,7 +14,7 @@ class LectureController extends Controller
     {
         $val = Validator::make($request->all(), [
             'lecture_id' => 'required|exists:lectures,id',
-            'image' => 'required|image|mimes:jpeg,jpg,png,gif|dimensions:max_width=1500,max_height=844',
+            'image' => 'required|image|mimes:jpeg,jpg,png,gif',
         ]);
         if ($val->fails()) {
             return response(['errors' => $val->errors()->all()], 422);
