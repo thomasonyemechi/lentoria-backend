@@ -54,7 +54,7 @@ class LectureController extends Controller
     }
 
 
-    function updateLectureCodes(Request $request)
+    public function updateLectureCodes(Request $request)
     {
         $val = Validator::make($request->all(), [
             'lecture_id' => 'required|exists:lectures,id',
@@ -77,7 +77,7 @@ class LectureController extends Controller
     }
 
 
-    function updateVideoLink(Request $request)
+    public function updateVideoLink(Request $request)
     {
         $val = Validator::make($request->all(), [
             'lecture_id' => 'required|exists:lectures,id',

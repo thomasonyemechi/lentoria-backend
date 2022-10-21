@@ -59,6 +59,7 @@ Route::get('/get_category_by_slug/{slug}', [CategoryController::class, 'findCate
 Route::get('/fetch_affiliate_questions', [QuestionaireController::class, 'fetchAffiliateQuestions']);
 Route::get('/fetch_instructor_questions', [QuestionaireController::class, 'fetchInstructorQuestions']);
 Route::get('/fetch_instructor_questions', [QuestionaireController::class, 'fetchInstructorQuestions']);
+Route::post('/topics_by_categories', [TopicController::class, 'groupTopicsByCategoryId']);
 
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
