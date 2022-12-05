@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\AnnoucementController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
@@ -61,7 +62,26 @@ Route::get('/fetch_instructor_questions', [QuestionaireController::class, 'fetch
 Route::get('/fetch_instructor_questions', [QuestionaireController::class, 'fetchInstructorQuestions']);
 
 
+
+
+
+
+
+
+Route::group(['prefix' => 'affiliate', 'middleware' => ['auth:api']], function () {
+    Route::get('all_transaction/{live_id}', [AffiliateController::class, 'getUsersAllTransactions']);
+    Route::get('recent_transaction/{live_id}', [AffiliateController::class, 'getUsersRecentTransactions']);
+    Route::get('account_summary/{live_id}', [AffiliateController::class, 'accountSummary']);
+    Route::get('active_referrals/{live_id}', [AffiliateController::class, 'activeReferral']);
+    Route::get('inactive_referrals/{live_id}', [AffiliateController::class, 'inactiveReferral']);
+    Route::get('compensation_plan', [AffiliateController::class, 'getCompensationPlan']);
+});
+
+
+
+
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
+
 
 
     ///become instructor
@@ -98,6 +118,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('/get_type_admin', [TypeController::class, 'fetchTypesAdmin']);
 
 
+
+    //general affialte Apis 
+
+
+
     Route::group(['middleware' => ['admin']], function () {
         //questionnaires....
         Route::post('/add_questionaire', [QuestionaireController::class, 'addQuestion']);
@@ -119,8 +144,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         Route::post('/update_type', [TypeController::class, 'updateType']);
 
         Route::get('/under_review_courses', [PublishController::class, 'fetchCoursesUnderReview']);
-
-
     });
 
 
@@ -171,8 +194,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         Route::post('update_lecture_text', [LectureController::class, 'updateTextcontent']);
         Route::post('update_lecture', [LectureController::class, 'updateLecture']);
         Route::post('get_video_link', [LectureController::class, 'checkVideoLink']);
-        Route::get('get_lecture_code/{lecture_id}',[LectureController::class,'getLectureCodes']);
-        Route::get('get_lecture_text/{lecture_id}',[LectureController::class,'getLectureText']);
+        Route::get('get_lecture_code/{lecture_id}', [LectureController::class, 'getLectureCodes']);
+        Route::get('get_lecture_text/{lecture_id}', [LectureController::class, 'getLectureText']);
 
         //materials
         Route::post('add_materials', [MaterialController::class, 'createMaterial']);
@@ -186,22 +209,21 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
 
 
         //virtual_class
-        Route::post('push_to_classroom',[VirtualClassController::class,'addContentToClass']);
-        Route::get('get_class_comments/{lecture_id}',[VirtualClassController::class,'getComments']);
+        Route::post('push_to_classroom', [VirtualClassController::class, 'addContentToClass']);
+        Route::get('get_class_comments/{lecture_id}', [VirtualClassController::class, 'getComments']);
 
 
         //schedules
-        Route::post('add_course_schedule',[VirtualClassController::class,'addSchedule']);
-        Route::post('update_course_schedule',[VirtualClassController::class,'editSchedule']);
-        Route::post('delete_course_schedule',[VirtualClassController::class,'deleteSchedule']);
-        Route::get('get_course_schedule/{course_id}',[VirtualClassController::class,'fetchSchedule']);
+        Route::post('add_course_schedule', [VirtualClassController::class, 'addSchedule']);
+        Route::post('update_course_schedule', [VirtualClassController::class, 'editSchedule']);
+        Route::post('delete_course_schedule', [VirtualClassController::class, 'deleteSchedule']);
+        Route::get('get_course_schedule/{course_id}', [VirtualClassController::class, 'fetchSchedule']);
 
         //market
-        Route::post('add_item_to_market',[MarketController::class,'addItemToMarket']);
-        Route::post('remove_item_from_market',[MarketController::class,'removeItemFromList']);
-        Route::post('fetch_my_market',[MarketController::class,'fetchMarketList']);
+        Route::post('add_item_to_market', [MarketController::class, 'addItemToMarket']);
+        Route::post('remove_item_from_market', [MarketController::class, 'removeItemFromList']);
+        Route::post('fetch_my_market', [MarketController::class, 'fetchMarketList']);
         ///
         Route::post('publish_course', [PublishController::class, 'publishCourse']);
-
     });
 });
