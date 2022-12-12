@@ -213,4 +213,19 @@ class TransactionController extends Controller
         $res = Http::asForm()->post(env('LINK') . '?balance=' . $live_id);
         return json_decode($res);
     }
+
+
+    function giftCourse(Request $request)
+    {
+        $val = Validator::make($request->all(), [
+            'course_id' => 'exists:courses,id',
+        ]);
+        if ($val->fails()) {
+            return response(['errors' => $val->errors()->all()], 422);
+        }
+
+        
+
+
+    }
 }

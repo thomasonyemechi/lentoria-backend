@@ -70,4 +70,5 @@ class AffiliateController extends Controller
         }
         return response($res);
     }
+
 }
