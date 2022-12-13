@@ -53,4 +53,9 @@ class Course extends Model
     {
         return $this->belongsTo(Type::class, 'course_type');
     }
+
+    function topic()
+    {
+        return $this->belongsTo(Topic::class, 'topic_id');
+    }
 }

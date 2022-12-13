@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\AnnoucementController;
 use App\Http\Controllers\AuthController;
@@ -63,12 +64,6 @@ Route::get('/fetch_instructor_questions', [QuestionaireController::class, 'fetch
 Route::post('/topics_by_categories', [TopicController::class, 'groupTopicsByCategoryId']);
 
 
-
-
-
-
-
-
 Route::group(['prefix' => 'affiliate', 'middleware' => ['auth:api']], function () {
     Route::get('all_transaction/{live_id}', [AffiliateController::class, 'getUsersAllTransactions']);
     Route::get('recent_transaction/{live_id}', [AffiliateController::class, 'getUsersRecentTransactions']);
@@ -120,7 +115,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
 
 
 
-    //general affialte Apis 
+    //general affialte Apis
 
 
 
@@ -145,6 +140,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         Route::post('/update_type', [TypeController::class, 'updateType']);
 
         Route::get('/under_review_courses', [PublishController::class, 'fetchCoursesUnderReview']);
+
+        ///admin fetcher api's
+        Route::get('/fetch_all_courses', [AdminController::class, 'fetchAllCourses']);
+
     });
 
 

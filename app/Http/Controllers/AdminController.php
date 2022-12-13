@@ -13,12 +13,13 @@ class AdminController extends Controller
 {
     function fetchAllCourses()
     {
-        $courses = Course::orderby('id', 'desc')->paginate(150);
+        $courses = Course::with(['user:id,firstname,lastname', 'topic:id,name', 'type:id,type'])->orderby('id', 'desc')->paginate(150, [
+            'id','title','image','published','slug','user_id', 'topic_id', 'course_type', 'created_at'
+        ]);
 
         return response([
             'data' => $courses
         ]);
-
     }
 
 

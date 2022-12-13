@@ -59,4 +59,8 @@ class User extends Authenticatable
     function wishlist(){
         return $this->hasMany(Wishlist::class);
     }
+
+    function affiliate(){
+        return $this->hasOne(Affiliate::class);
+    }
 }
