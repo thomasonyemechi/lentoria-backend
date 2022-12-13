@@ -199,4 +199,15 @@ class PublishController extends Controller
     }
 
 
+    function publishedStatus($status)
+    {
+        if($status = 0)  {
+            $val = 'Newly Created';
+        }else if($status == 1) {
+            
+        }else if($status == 5 ) {
+            $val = 'Under Review';
+        }
+    }
+
 }

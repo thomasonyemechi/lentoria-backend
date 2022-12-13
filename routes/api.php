@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\AnnoucementController;
 use App\Http\Controllers\AuthController;
@@ -145,6 +146,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         Route::post('/update_type', [TypeController::class, 'updateType']);
 
         Route::get('/under_review_courses', [PublishController::class, 'fetchCoursesUnderReview']);
+
+        ///admin fetcher api's 
+        Route::get('/fetch_all_courses', [AdminController::class, 'fetchAllCourses']);
+
     });
 
 
