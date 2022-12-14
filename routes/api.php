@@ -64,6 +64,12 @@ Route::get('/fetch_instructor_questions', [QuestionaireController::class, 'fetch
 Route::post('/topics_by_categories', [TopicController::class, 'groupTopicsByCategoryId']);
 
 
+
+
+
+
+
+
 Route::group(['prefix' => 'affiliate', 'middleware' => ['auth:api']], function () {
     Route::get('all_transaction/{live_id}', [AffiliateController::class, 'getUsersAllTransactions']);
     Route::get('recent_transaction/{live_id}', [AffiliateController::class, 'getUsersRecentTransactions']);
