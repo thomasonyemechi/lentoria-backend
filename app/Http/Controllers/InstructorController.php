@@ -68,14 +68,8 @@ class InstructorController extends Controller
     public function fetchInstructorByCourseId($id)
     {
         $course = Course::findOrFail($id);
-        $related = Course::query()
-            ->whereNot('id', $course->id)
-            ->where('topic_id', $course->topic_id)
-            ->limit(4)
-            ->get();
         return response([
             'data' => [
-                'related' => $related,
                 'course_info' => collect($course)->forget('user')->all(),
                 'basic_info' => collect($course->user)->forget('instructor')->all(),
                 'instructor' => $course->user->instructor,
@@ -83,6 +77,7 @@ class InstructorController extends Controller
             ],
         ]);
     }
+
 
     public function fetchInstructorById($id)
     {
