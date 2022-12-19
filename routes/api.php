@@ -221,5 +221,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         Route::post('fetch_my_market', [MarketController::class, 'fetchMarketList']);
         ///
         Route::post('publish_course', [PublishController::class, 'publishCourse']);
+
+        Route::get('fetch_types', [TypeController::class, 'fetchTypes']);
     });
 });
