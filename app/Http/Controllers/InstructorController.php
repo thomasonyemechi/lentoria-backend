@@ -31,7 +31,7 @@ class InstructorController extends Controller
         if ($validated->fails()) {
             return response(['errors' => $validated->errors()->all()], 422);
         }
-        
+
         $user = User::find($request->id);
         $user->instructor->update([
             'headline' => $request->headline,
@@ -77,6 +77,7 @@ class InstructorController extends Controller
             ],
         ]);
     }
+
 
     public function fetchInstructorById($id)
     {

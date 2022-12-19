@@ -41,6 +41,7 @@ Route::get('/instructor_info/{id}', [InstructorController::class, 'fetchInstruct
 Route::get('/instructor_courses/{id}', [InstructorController::class, 'fetchCoursesForInstructor']);
 Route::get('/categories', [CategoryController::class, 'categories']);
 Route::get('/courses', [CourseController::class, 'getCoursesRandomly']);
+Route::get('/related_courses/{course_id}', [CourseController::class, 'getRelatedCourses']);
 Route::get('/courses/{id}', [CourseController::class, 'coursesByCategory']);
 Route::get('get_sections/{course_id}', [SectionController::class, 'getSections']);
 Route::get('fetch_lectures/{section_id}', [LectureController::class, 'fetchLectures']);
@@ -65,12 +66,6 @@ Route::get('/fetch_instructor_questions', [QuestionaireController::class, 'fetch
 Route::post('/topics_by_categories', [TopicController::class, 'groupTopicsByCategoryId']);
 
 
-
-
-
-
-
-
 Route::group(['prefix' => 'affiliate', 'middleware' => ['auth:api']], function () {
     Route::get('all_transaction/{live_id}', [AffiliateController::class, 'getUsersAllTransactions']);
     Route::get('recent_transaction/{live_id}', [AffiliateController::class, 'getUsersRecentTransactions']);
@@ -81,10 +76,7 @@ Route::group(['prefix' => 'affiliate', 'middleware' => ['auth:api']], function (
 });
 
 
-
-
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
-
 
 
     ///become instructor
@@ -121,9 +113,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::get('/get_type_admin', [TypeController::class, 'fetchTypesAdmin']);
 
 
-
-    //general affialte Apis 
-
+    //general affialte Apis
 
 
     Route::group(['middleware' => ['admin']], function () {
@@ -148,7 +138,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
 
         Route::get('/under_review_courses', [PublishController::class, 'fetchCoursesUnderReview']);
 
-        ///admin fetcher api's 
+        ///admin fetcher api's
         Route::get('/fetch_all_courses', [AdminController::class, 'fetchAllCourses']);
 
     });

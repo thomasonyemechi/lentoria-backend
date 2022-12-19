@@ -15,12 +15,7 @@ use Illuminate\Support\Str;
 class CourseController extends Controller
 {
 
-    function generateLink($length)
-    {
-        return substr(str_shuffle(str_repeat('123456789abcdefghijklmnopqrstuvwxyz_-ABCDEFGHIJKLMNOPQRSTUVWXYZ', $length)), 0, $length);
-    }
-
-    function validateLink(Request $request)
+    public function validateLink(Request $request)
     {
         $validated = Validator::make($request->all(), [
             'link' => 'required',
@@ -39,16 +34,10 @@ class CourseController extends Controller
     }
 
 
-    function getCourseFromLinkPost(Request $request, $link, $ref='')
-    {
-        
-    }
-
-
     function getCourseFromLink($link)
     {
         $course = Course::where(['link' => $link, 'published' => 1])->first(['id', 'slug', 'title', 'link']);
-        if($course) {
+        if ($course) {
             return response([
                 'data' => $course
             ], 200);
@@ -60,8 +49,7 @@ class CourseController extends Controller
         ], 404);
     }
 
-
-    function updateCourseLink(Request $request)
+    public function updateCourseLink(Request $request)
     {
         $validated = Validator::make($request->all(), [
             'link' => 'required|unique:courses,link',
@@ -79,7 +67,6 @@ class CourseController extends Controller
             'message' => 'Short link has been updated successfully'
         ]);
     }
-
 
     public function courseUpdate(Request $request)
     {
@@ -148,7 +135,7 @@ class CourseController extends Controller
         if ($val->fails()) {
             return response(['errors' => $val->errors()->all()], 422);
         }
-        $slug = rand(111111, 9999999) .'_'. Str::slug($request->title);
+        $slug = rand(111111, 9999999) . '_' . Str::slug($request->title);
         $course = Course::create([
             'user_id' => auth()->user()->id,
             'slug' => $slug,
@@ -172,6 +159,11 @@ class CourseController extends Controller
         ]);
 
         return response(['message' => 'Course has been created successfully', 'slug' => $slug], 200);
+    }
+
+    function generateLink($length)
+    {
+        return substr(str_shuffle(str_repeat('123456789abcdefghijklmnopqrstuvwxyz_-ABCDEFGHIJKLMNOPQRSTUVWXYZ', $length)), 0, $length);
     }
 
     public function addCourseMessage(Request $request)
@@ -198,7 +190,7 @@ class CourseController extends Controller
 
     public function fetchCourseLearners($slug)
     {
-        $id = Course::where('slug',$slug)->value('id');
+        $id = Course::where('slug', $slug)->value('id');
         return response(['data' => CourseInfo::where('course_id', $id)->get()]);
     }
 
@@ -226,7 +218,7 @@ class CourseController extends Controller
         ]);
 
         return response([
-            'message' => 'Pricing info has been updaetd sucessfully',
+            'message' => 'Pricing info has been updated successfully',
         ], 200);
     }
 
@@ -275,6 +267,17 @@ class CourseController extends Controller
         return response(['data' => $courses], 200);
     }
 
+    function fetchCourseByTypeGroupByCategoryAll()
+    {
+        $types = Type::inRandomOrder()->limit(3)->get();
+        foreach ($types as $index => $type) {
+            $types[$index]['categories'] = $this->fetchCourseByTypeGroupByCategory($type->id);
+        }
+        return response([
+            'data' => $types
+        ], 200);
+    }
+
     function fetchCourseByTypeGroupByCategory($type_id)
     {
         //$categories = Category::inRandomOrder()->with('published_courses')->get();
@@ -294,14 +297,23 @@ class CourseController extends Controller
         return $new_arr;
     }
 
-    function fetchCourseByTypeGroupByCategoryAll()
+    public function getRelatedCourses($course_id)
     {
-        $types = Type::inRandomOrder()->limit(3)->get();
-        foreach ($types as $index => $type) {
-            $types[$index]['categories'] = $this->fetchCourseByTypeGroupByCategory($type->id);
-        }
-        return response([
-            'data' => $types
-        ], 200);
+        $course = Course::findOrFail($course_id);
+        $related = Course::query()
+            ->whereNot('id', $course->id)
+            ->where([['topic_id', "=", $course->topic_id], ['published', "=", 1]])
+            ->limit(4)
+            ->get()->map(fn($item) => [
+                'id' => $item->id,
+                'image' => $item->image,
+                'level' => $item->level,
+                'slug' => $item->slug,
+                'title' => $item->title,
+                'instructor' => $item->user->only(['firstname', 'lastname']),
+                'price' => $item->price,
+            ]);
+        return response(['data' => $related]);
     }
+
 }
