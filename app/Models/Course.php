@@ -14,9 +14,11 @@ class Course extends Model
     ];
 
 
-    function user(){
+    function user()
+    {
         return $this->belongsTo(User::class);
     }
+
     function owners()
     {
         return $this->hasMany(CourseOwner::class);
@@ -32,15 +34,18 @@ class Course extends Model
         return $this->belongsTo(User::class);
     }
 
-    function scopeOfGetUser($query,$type){
-        return $query->where('user_id',$type);
+    function scopeOfGetUser($query, $type)
+    {
+        return $query->where('user_id', $type);
     }
 
-    function wishlist(){
+    function wishlist()
+    {
         return $this->hasMany(Wishlist::class);
     }
 
-    function category(){
+    function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
@@ -57,5 +62,10 @@ class Course extends Model
     function topic()
     {
         return $this->belongsTo(Topic::class, 'topic_id');
+    }
+
+    function lectures()
+    {
+        return $this->hasManyThrough(Lecture::class, Section::class);
     }
 }

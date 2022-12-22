@@ -224,8 +224,5 @@ class TransactionController extends Controller
             return response(['errors' => $val->errors()->all()], 422);
         }
 
-        
-
-
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Course;
 use App\Models\CourseInfo;
 use App\Models\CourseOwner;
+use App\Models\Transaction;
 use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -126,7 +127,7 @@ class CourseController extends Controller
         $val = Validator::make($request->all(), [
             'title' => 'required|string|max:100',
             'subtitle' => 'required|string|max:100',
-            'course_type' => 'required',
+//            'course_type' => 'required',
             'category_id' => 'required|exists:categories,id',
             'topic_id' => 'required|exists:topics,id',
         ]);
@@ -140,7 +141,7 @@ class CourseController extends Controller
             'slug' => $slug,
             'title' => $request->title,
             'subtitle' => $request->subtitle,
-            'course_type' => $request->course_type,
+            'course_type' => 2,
             'category_id' => $request->category_id,
             'topic_id' => $request->topic_id,
             'link' => $this->generateLink(10),
@@ -298,6 +299,7 @@ class CourseController extends Controller
 
     public function getRelatedCourses($course_id)
     {
+
         $course = Course::findOrFail($course_id);
         $related = Course::query()
             ->whereNot('id', $course->id)
@@ -312,7 +314,48 @@ class CourseController extends Controller
                 'instructor' => $item->user->only(['firstname', 'lastname']),
                 'price' => $item->price,
             ]);
-        return response(['data' => $related]);
+        return response(['data' => $related], 200);
     }
 
+    public function getUserPurchasedCourses()
+    {
+        $courses = Course::query()->select(['id', 'title', 'image', 'course_type', 'slug', 'link'])->whereIn('id', function ($query) {
+            $query->select('course_id')
+                ->from('transactions')
+                ->where('user_id', auth()->id());
+        })->withCount('lectures')->get();
+        return response(['data' => $courses], 200);
+    }
+
+    public function getRandomlySimilarCourses()
+    {
+        $course_types = Course::query()->whereIn('id', function ($query) {
+            $query->select('course_id')
+                ->from('transactions')
+                ->where('user_id', auth()->id());
+        })->get(['course_type']);
+        $courses = Course::query()->with(['user:id,firstname,lastname'])->whereNotIn('id', function ($query) {
+            $query->select('course_id')
+                ->from('transactions')
+                ->where('user_id', auth()->id());
+        })->where('published', '=', 1)
+            ->whereIn('course_type', $course_types->toArray())
+            ->inRandomOrder()
+            ->limit(8)
+            ->get();
+        return response(['data' => $courses], 200);
+    }
+
+    public function getCourseInfoForUser($slug)
+    {
+
+        $course = Course::where('slug', $slug)->firstOrFail();
+        return response([
+            'data' => [
+                'course_info' => collect($course)->forget('user')->only(['id', 'title', 'level', 'description', 'subtitle']),
+                'instructor_info' => collect($course->user)->forget('instructor')->only(['firstname', 'lastname', 'email']),
+                'wywl' => $course->info->what_you_will_learn,
+            ],
+        ]);
+    }
 }

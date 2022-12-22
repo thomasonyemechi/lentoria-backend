@@ -74,6 +74,14 @@ Route::group(['prefix' => 'affiliate', 'middleware' => ['auth:api']], function (
     Route::get('compensation_plan', [AffiliateController::class, 'getCompensationPlan']);
 });
 
+Route::prefix('user')->as('user.')->middleware('auth:api')->group(function () {
+    Route::get('/courses', [CourseController::class, 'getUserPurchasedCourses']);
+    Route::get('/similar_courses', [CourseController::class, 'getRandomlySimilarCourses']);
+    Route::get('/get_course_info/{slug}', [CourseController::class, 'getCourseInfoForUser']);
+    Route::get('/section_lectures/{slug}', [SectionController::class, 'getSectionsBySlug']);
+    Route::get('/get_faqs/{slug}', [FaqController::class, 'fetchFaqBySlug']);
+});
+
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api']], function () {
 
