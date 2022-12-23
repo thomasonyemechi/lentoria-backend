@@ -77,7 +77,7 @@ class CourseController extends Controller
             'language' => 'required',
             'level' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'course_type' => 'required',
+//            'course_type' => 'required',
             'topic_id' => 'required|exists:topics,id',
             'image' => 'image|mimes:jpeg,jpg,png,gif|dimensions:ratio=3/2',
             'video' => 'mimes:avi,mpeg,mp4',
@@ -114,7 +114,7 @@ class CourseController extends Controller
             'level' => $request->level,
             'category_id' => $request->category_id,
             'topic_id' => $request->topic_id,
-            'course_type' => $request->course_type,
+            'course_type' => 2,
             'image' => $imageName ?? $old->image,
             'video' => $videoName ?? $old->video,
         ]);
@@ -260,11 +260,18 @@ class CourseController extends Controller
         return response(['data' => $courses], 200);
     }
 
-    function getCoursesRandomly()
+    public function getCoursesRandomlyAndGroupByCategory()
     {
-        $courses = Course::with('user')->inRandomOrder()->limit(30)->get();
+        $categories = Category::query()
+            ->select('id', 'name')
+            ->withWhereHas('courses', function ($query) {
+                $query->where('published', 1)
+                    ->with(['user:id,firstname,lastname'])
+                    ->inRandomOrder()
+                    ->limit(20);
+            })->inRandomOrder()->limit(10)->get();
 
-        return response(['data' => $courses], 200);
+        return response(['data' => $categories], 200);
     }
 
     function fetchCourseByTypeGroupByCategoryAll()

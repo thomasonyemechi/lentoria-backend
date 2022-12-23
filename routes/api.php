@@ -40,7 +40,7 @@ Route::get('/course_info/{id}', [InstructorController::class, 'fetchInstructorBy
 Route::get('/instructor_info/{id}', [InstructorController::class, 'fetchInstructorById']);
 Route::get('/instructor_courses/{id}', [InstructorController::class, 'fetchCoursesForInstructor']);
 Route::get('/categories', [CategoryController::class, 'categories']);
-Route::get('/courses', [CourseController::class, 'getCoursesRandomly']);
+Route::get('/courses', [CourseController::class, 'getCoursesRandomlyAndGroupByCategory']);
 Route::get('/related_courses/{course_id}', [CourseController::class, 'getRelatedCourses']);
 Route::get('/courses/{id}', [CourseController::class, 'coursesByCategory']);
 Route::get('get_sections/{course_id}', [SectionController::class, 'getSections']);
