@@ -40,7 +40,7 @@ Route::get('/course_info/{id}', [InstructorController::class, 'fetchInstructorBy
 Route::get('/instructor_info/{id}', [InstructorController::class, 'fetchInstructorById']);
 Route::get('/instructor_courses/{id}', [InstructorController::class, 'fetchCoursesForInstructor']);
 Route::get('/categories', [CategoryController::class, 'categories']);
-Route::get('/courses', [CourseController::class, 'getCoursesRandomly']);
+Route::get('/courses', [CourseController::class, 'getCoursesRandomlyAndGroupByCategory']);
 Route::get('/related_courses/{course_id}', [CourseController::class, 'getRelatedCourses']);
 Route::get('/courses/{id}', [CourseController::class, 'coursesByCategory']);
 Route::get('get_sections/{course_id}', [SectionController::class, 'getSections']);
@@ -73,6 +73,14 @@ Route::group(['prefix' => 'affiliate', 'middleware' => ['auth:api']], function (
     Route::get('active_referrals/{live_id}', [AffiliateController::class, 'activeReferral']);
     Route::get('inactive_referrals/{live_id}', [AffiliateController::class, 'inactiveReferral']);
     Route::get('compensation_plan', [AffiliateController::class, 'getCompensationPlan']);
+});
+
+Route::prefix('user')->as('user.')->middleware('auth:api')->group(function () {
+    Route::get('/courses', [CourseController::class, 'getUserPurchasedCourses']);
+    Route::get('/similar_courses', [CourseController::class, 'getRandomlySimilarCourses']);
+    Route::get('/get_course_info/{slug}', [CourseController::class, 'getCourseInfoForUser']);
+    Route::get('/section_lectures/{slug}', [SectionController::class, 'getSectionsBySlug']);
+    Route::get('/get_faqs/{slug}', [FaqController::class, 'fetchFaqBySlug']);
 });
 
 
@@ -222,5 +230,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         Route::post('fetch_my_market', [MarketController::class, 'fetchMarketList']);
         ///
         Route::post('publish_course', [PublishController::class, 'publishCourse']);
+
+        Route::get('fetch_types', [TypeController::class, 'fetchTypes']);
     });
 });

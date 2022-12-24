@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use App\Models\Faq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -71,5 +72,12 @@ class FaqController extends Controller
         return response([
             'data' => $faqs
         ], 200);
+    }
+
+    public function fetchFaqBySlug($slug)
+    {
+        $course_id = Course::where('slug', $slug)->firstOrFail('id');
+        $faqs = Faq::where(['course_id' => $course_id])->get(['id', 'question', 'answer']);
+        return response(['data' => $faqs], 200);
     }
 }
