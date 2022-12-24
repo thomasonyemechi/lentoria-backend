@@ -58,4 +58,9 @@ class Course extends Model
     {
         return $this->belongsTo(Topic::class, 'topic_id');
     }
+
+    function lectures()
+    {
+        return $this->hasManyThrough(Lecture::class, Section::class);
+    }
 }
