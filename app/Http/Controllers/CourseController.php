@@ -128,7 +128,7 @@ class CourseController extends Controller
         $val = Validator::make($request->all(), [
             'title' => 'required|string|max:100',
             'subtitle' => 'required|string|max:100',
-//            'course_type' => 'required',
+            'course_level' => 'required',
             'category_id' => 'required|exists:categories,id',
             'topic_id' => 'required|exists:topics,id',
         ]);
@@ -143,6 +143,7 @@ class CourseController extends Controller
             'title' => $request->title,
             'subtitle' => $request->subtitle,
             'course_type' => 2,
+            'level' => $request->course_level,
             'category_id' => $request->category_id,
             'topic_id' => $request->topic_id,
             'link' => $this->generateLink(10),
@@ -159,7 +160,7 @@ class CourseController extends Controller
             'course_id' => $course->id,
         ]);
 
-        return response(['message' => 'Course has been created successfully', 'slug' => $slug,'course-type'=>2], 200);
+        return response(['message' => 'Course has been created successfully', 'slug' => $slug,'course_type'=>2], 200);
     }
 
     function generateLink($length)
