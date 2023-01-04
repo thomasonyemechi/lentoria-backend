@@ -158,7 +158,7 @@ class CourseController extends Controller
             'course_id' => $course->id,
         ]);
 
-        return response(['message' => 'Course has been created successfully', 'slug' => $slug], 200);
+        return response(['message' => 'Course has been created successfully', 'slug' => $slug,'course-type'=>2], 200);
     }
 
     function generateLink($length)
