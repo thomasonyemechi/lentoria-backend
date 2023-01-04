@@ -80,7 +80,7 @@ class CourseController extends Controller
             'category_id' => 'required|exists:categories,id',
 //            'course_type' => 'required',
             'topic_id' => 'required|exists:topics,id',
-            'image' => 'image|mimes:jpeg,jpg,png,gif|dimensions:ratio=3/2',
+            'image' => 'image|mimes:jpeg,jpg,png,gif|dimensions:width=750,height=422',
             'video' => 'mimes:avi,mpeg,mp4',
         ]);
         if ($validated->fails()) {
