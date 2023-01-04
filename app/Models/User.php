@@ -63,4 +63,9 @@ class User extends Authenticatable
     function affiliate(){
         return $this->hasOne(Affiliate::class);
     }
+
+    function devices()
+    {
+        return $this->hasMany(Device::class);
+    }
 }

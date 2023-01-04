@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Http;
 class AffiliateController extends Controller
 {
 
+    function logMyLink()
+    {
+
+    }
+
+    
     function getCompensationPlan()
     {
         $res = Http::get(env('LINK'), [
