@@ -130,4 +130,13 @@ class PackageController extends InstructorController
         ]);
         return json_decode($res);
     }
+
+
+    function comparePlan($live_id)
+    {
+        $res = Http::get(env('LINK'), [
+            'checkMyPackage' => $live_id
+        ]);
+        return json_decode($res);
+    }
 }

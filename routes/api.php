@@ -65,6 +65,8 @@ Route::get('/fetch_instructor_questions', [QuestionaireController::class, 'fetch
 Route::get('/fetch_instructor_questions', [QuestionaireController::class, 'fetchInstructorQuestions']);
 Route::post('/topics_by_categories', [TopicController::class, 'groupTopicsByCategoryId']);
 
+Route::get('compare_plan/{live_id}', [PackageController::class, 'comparePlan']);
+
 
 Route::group(['prefix' => 'affiliate', 'middleware' => ['auth:api']], function () {
     Route::get('all_transaction/{live_id}', [AffiliateController::class, 'getUsersAllTransactions']);
