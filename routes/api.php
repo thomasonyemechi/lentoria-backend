@@ -94,6 +94,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::post('/activate_from_card', [PackageController::class, 'activateFromCard']);
     Route::get('/fetch_all_instructor', [InstructorController::class, 'fetchAllInstructor']);
     Route::get('/fetch_single_instructor', [InstructorController::class, 'fetchSingleInstructor']);
+    Route::get('/become_instructor', [InstructorController::class, 'becomeInstructorFromLink']);
     Route::get('/instructor_info', [InstructorController::class, 'getInstructorProfile']);
     Route::post('/submit_questionnaire', [QuestionaireController::class, 'saveUserAnswers']);
 

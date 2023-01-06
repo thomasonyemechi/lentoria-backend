@@ -13,6 +13,16 @@ use Illuminate\Support\Facades\Http;
 
 class InstructorController extends Controller
 {
+
+    function becomeInstructorFromLink()
+    {
+        $user = auth()->user();
+        $this->becomeInstructor($user->id);
+
+        return response([
+            'message' => 'You are now an instructor'
+        ], 200);
+    }
     public function becomeInstructor($id)
     {
         $user = User::find($id);
@@ -104,5 +114,31 @@ class InstructorController extends Controller
     {
         $instructor = Instructor::where('user_id', auth()->id())->get();
         return response(['data' => $instructor], 200);
+    }
+
+
+    function uploadProfilePicture(Request $request)
+    {
+        $val = Validator::make($request->all(), [
+            'image' => 'required|file|max:2048'
+        ]);
+
+        if ($val->fails()) {
+            return response(['errors' => $val->errors()->all()], 422);
+        }
+
+        $user = auth()->user();
+
+
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $imageName = $file->hashName();
+            $destinationPath = public_path() . '/assets/uploads/';
+            if (($old->image != '' || $old->image != null) && file_exists($destinationPath . $old->image)) {
+                unlink($destinationPath . $old->image);
+            }
+            $file->move($destinationPath, $imageName);
+        }
     }
 }
