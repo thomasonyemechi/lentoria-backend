@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ActivationPayment;
 use App\Models\Course;
 use App\Models\Instructor;
+use App\Models\Questionaire;
+use App\Models\QuestionaireAnswer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -23,6 +25,7 @@ class InstructorController extends Controller
             'message' => 'You are now an instructor'
         ], 200);
     }
+
     public function becomeInstructor($id)
     {
         $user = User::find($id);
@@ -130,7 +133,6 @@ class InstructorController extends Controller
         $user = auth()->user();
 
 
-
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $imageName = $file->hashName();
@@ -140,5 +142,16 @@ class InstructorController extends Controller
             }
             $file->move($destinationPath, $imageName);
         }
+    }
+
+    public function checkIfQnaireAnsd()
+    {
+        $answer_exists = QuestionaireAnswer::where('user_id', '=', auth()->id())->exists();
+
+        if ($answer_exists) {
+            return response(['data' => true], 200);
+        }
+
+        return response(['data' => false,], 200);
     }
 }

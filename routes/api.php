@@ -159,6 +159,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
         // Instructor
         Route::post('/update_instructor_profile', [InstructorController::class, 'updateInstructorProfile']);
 
+        // Questionnaire
+        Route::post('/check_qnaire_status', [InstructorController::class, 'checkIfQnaireAnsd']);
+
         //short Links
         Route::post('/vaildate_link', [CourseController::class, 'validateLink']);
         Route::get('/generate_link/{length}', [CourseController::class, 'generateLink']);
