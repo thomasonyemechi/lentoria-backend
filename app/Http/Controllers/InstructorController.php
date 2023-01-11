@@ -9,6 +9,7 @@ use App\Models\Questionaire;
 use App\Models\QuestionaireAnswer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Http;
 
@@ -130,18 +131,27 @@ class InstructorController extends Controller
             return response(['errors' => $val->errors()->all()], 422);
         }
 
-        $user = auth()->user();
-
+        $user = Auth::user();
+        $old_image = $user->instructor->image;
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $imageName = $file->hashName();
+            $imageName = 'profile_pic_'.$file->hashName();
             $destinationPath = public_path() . '/assets/uploads/';
-            if (($old->image != '' || $old->image != null) && file_exists($destinationPath . $old->image)) {
-                unlink($destinationPath . $old->image);
+            if (($old_image != '' || $old_image != null) && file_exists($destinationPath . $old_image)) {
+                unlink($destinationPath . $old_image);
             }
             $file->move($destinationPath, $imageName);
+
+            Instructor::where('id', $user->id)->update([
+                'image'  => $imageName
+            ]);
         }
+
+        return response([
+            'message' => 'Profile Picture has been updated successfully'
+        ]);
+
     }
 
     public function checkIfQnaireAnsd()

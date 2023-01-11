@@ -78,7 +78,7 @@ class CourseController extends Controller
             'language' => 'required',
             'level' => 'required',
             'category_id' => 'required|exists:categories,id',
-        //    'course_type' => 'required',
+            //    'course_type' => 'required',
             'topic_id' => 'required|exists:topics,id',
             'image' => 'image|mimes:jpeg,jpg,png,gif|dimensions:width=750,height=422',
             'video' => 'mimes:avi,mpeg,mp4',
@@ -161,7 +161,7 @@ class CourseController extends Controller
             'course_id' => $course->id,
         ]);
 
-        return response(['message' => 'Course has been created successfully', 'slug' => $slug,'course_type'=>2], 200);
+        return response(['message' => 'Course has been created successfully', 'slug' => $slug, 'course_type' => 2], 200);
     }
 
     function generateLink($length)
@@ -315,7 +315,7 @@ class CourseController extends Controller
             ->whereNot('id', $course->id)
             ->where([['topic_id', "=", $course->topic_id], ['published', "=", 1]])
             ->limit(4)
-            ->get()->map(fn($item) => [
+            ->get()->map(fn ($item) => [
                 'id' => $item->id,
                 'image' => $item->image,
                 'level' => $item->level,
