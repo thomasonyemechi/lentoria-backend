@@ -147,6 +147,7 @@ class InstructorController extends Controller
                 'image'  => $imageName
             ]);
         }
+        
 
         return response([
             'message' => 'Profile Picture has been updated successfully'
