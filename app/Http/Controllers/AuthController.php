@@ -19,11 +19,13 @@ class AuthController extends Controller
             return response(['errors' => $validatedData->errors()->all()], 422);
         }
 
+
         $res = Http::asForm()->post(env('LINK'), [
             'userlogin' => '...',
             'email' => $request->email,
             'password' => $request->password,
         ]);
+        
 
         if (!$res['success']) {
             return response([
@@ -44,7 +46,7 @@ class AuthController extends Controller
         $af = ($user->affiliate) ? 1 : 0;
 
         return response([
-            'message' => 'Login successfull', 'access_token' => $accessToken, 'data' => $user, 'instructor' => $in, 'affiliate' => $af, 'admin' => $user->role  
+            'message' => 'Login successfull', 'access_token' => $accessToken, 'data' => $user, 'instructor' => $in, 'affiliate' => $af, 'admin' => $user->role
         ], 200);
     }
 
