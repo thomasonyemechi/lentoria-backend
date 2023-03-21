@@ -34,6 +34,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('/reset_password', [AuthController::class, 'resetPassword']);
+Route::post('/forgot_password', [AuthController::class, 'forgotPassword']);
 Route::post('/user_login', [AuthController::class, 'login']);
 Route::post('/user_signup', [AuthController::class, 'signup']);
 Route::get('/course_info/{id}', [InstructorController::class, 'fetchInstructorByCourseId']);
