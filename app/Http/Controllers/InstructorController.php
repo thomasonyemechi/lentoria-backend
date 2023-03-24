@@ -143,7 +143,7 @@ class InstructorController extends Controller
             }
             $file->move($destinationPath, $imageName);
 
-            Instructor::where('id', $user->id)->update([
+            Instructor::where('user_id', $user->id)->update([
                 'image'  => $imageName
             ]);
         }

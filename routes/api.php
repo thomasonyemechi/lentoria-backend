@@ -160,8 +160,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
     Route::group(['middleware' => ['instructor']], function () {
         // Instructor
         Route::post('/update_instructor_profile', [InstructorController::class, 'updateInstructorProfile']);
+        Route::post('/upload_profile_picture', [InstructorController::class, 'uploadProfilePicture']);
 
-        // Questionnaire
+        // Questionnairer
         Route::post('/check_qnaire_status', [InstructorController::class, 'checkIfQnaireAnsd']);
 
         //short Links
