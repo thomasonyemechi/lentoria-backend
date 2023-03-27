@@ -35,7 +35,7 @@ class CourseController extends Controller
     }
 
 
-    function getCourseFromLink($link)
+    function getCourseFromLink($link,$ref="")
     {
         $course = Course::where(['link' => $link, 'published' => 1])->first(['id', 'slug', 'title', 'link']);
         if ($course) {

@@ -56,7 +56,7 @@ Route::post('/has_course', [TransactionController::class, 'hasCourse']);
 Route::get('/fetch_live_plans', [PackageController::class, 'fetcLivepetalPackagesAll']);
 Route::get('/fetch_live_plan/{plan_id}', [PackageController::class, 'fetcLivepetalPackagesSingle']);
 Route::get('/get_course_from_link/{link}', [CourseController::class, 'getCourseFromLink']);
-Route::post('/get_course_from_link/{link}/{ref?}', [CourseController::class, 'getCourseFromLinkPost']);
+Route::post('/get_course_from_link/{link}/{ref?}', [CourseController::class, 'getCourseFromLink']);
 
 Route::get('/get_topic_by_slug/{slug}', [TopicController::class, 'findTopicbySlug']);
 Route::get('/get_category_by_slug/{slug}', [CategoryController::class, 'findCategoryBySlug']);
