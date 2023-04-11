@@ -6,9 +6,7 @@ use App\Models\Category;
 use App\Models\Course;
 use App\Models\CourseInfo;
 use App\Models\CourseOwner;
-use App\Models\Transaction;
 use App\Models\Type;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -35,7 +33,7 @@ class CourseController extends Controller
     }
 
 
-    function getCourseFromLink($link,$ref="")
+    function getCourseFromLink($link, $ref = "")
     {
         $course = Course::where(['link' => $link, 'published' => 1])->first(['id', 'slug', 'title', 'link']);
         if ($course) {
@@ -78,9 +76,9 @@ class CourseController extends Controller
             'language' => 'required',
             'level' => 'required',
             'category_id' => 'required|exists:categories,id',
-            //    'course_type' => 'required',
+            'course_type' => 'required',
             'topic_id' => 'required|exists:topics,id',
-            'image' => 'image|mimes:jpeg,jpg,png,gif|dimensions:min-width=750,min-height=422',
+            'image' => 'image|mimes:jpeg,jpg,png,gif|dimensions:min-width=750,min-height=422,',
             'video' => 'mimes:avi,mpeg,mp4',
         ]);
         if ($validated->fails()) {
@@ -115,7 +113,7 @@ class CourseController extends Controller
             'level' => $request->level,
             'category_id' => $request->category_id,
             'topic_id' => $request->topic_id,
-            'course_type' => 2,
+            'course_type' => $request->course_type,
             'image' => $imageName ?? $old->image,
             'video' => $videoName ?? $old->video,
         ]);
@@ -315,7 +313,7 @@ class CourseController extends Controller
             ->whereNot('id', $course->id)
             ->where([['topic_id', "=", $course->topic_id], ['published', "=", 1]])
             ->limit(4)
-            ->get()->map(fn ($item) => [
+            ->get()->map(fn($item) => [
                 'id' => $item->id,
                 'image' => $item->image,
                 'level' => $item->level,
