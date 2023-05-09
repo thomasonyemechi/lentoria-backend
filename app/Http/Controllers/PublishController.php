@@ -17,7 +17,7 @@ class PublishController extends Controller
     {
         $courses = Course::where('id', $request->course_id)->update(['published' => 1]);
         return response([
-            'message' => 'Course Has been approved sucessfully',
+            'message' => 'Course Has been approved successfully',
         ], 200);
     }
 

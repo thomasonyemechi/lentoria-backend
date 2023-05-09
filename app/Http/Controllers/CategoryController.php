@@ -32,7 +32,7 @@ class CategoryController extends Controller
     function update(Request $request)
     {
         $validated = Validator::make($request->all(), [
-            'name' => 'required|unique:categories,name',
+            'name' => "required|unique:categories,name,$request->category_id",
             'category_id' => 'required|exists:categories,id'
         ]);
 
@@ -45,7 +45,7 @@ class CategoryController extends Controller
             'slug' => Str::slug($request->name)
         ]);
 
-        return response(['message' => 'Category has been updated sucesfully',]);
+        return response(['message' => 'Category has been updated successfully',]);
     }
 
     function status(Request $request)

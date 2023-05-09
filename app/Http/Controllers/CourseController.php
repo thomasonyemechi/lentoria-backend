@@ -319,7 +319,7 @@ class CourseController extends Controller
                 'level' => $item->level,
                 'slug' => $item->slug,
                 'title' => $item->title,
-                'instructor' => $item->user->only(['firstname', 'lastname']),
+                'instructor' => $item->user->only(['firstname', 'lastname', 'image']),
                 'price' => $item->price,
             ]);
         return response(['data' => $related], 200);
@@ -365,5 +365,57 @@ class CourseController extends Controller
                 'wywl' => $course->info->what_you_will_learn,
             ],
         ]);
+    }
+
+    public function getCoursesForJson()
+    {
+        $chunkSize = 500;
+        $results = [];
+        try {
+            Course::select(['title', 'description', 'id', 'slug', 'link'])->where('published', '=', 1)->orderBy('id')->chunk($chunkSize, function ($models) use (&$results) {
+                foreach ($models as $model) {
+                    $results[] = $model->toArray();
+                }
+            });
+            return response(['data' => $results], 200);
+        } catch (\Exception $exception) {
+            return response(['error' => $exception->getMessage()], 422);
+        }
+
+    }
+
+    public function searchCourses(Request $request)
+    {
+        try {
+            $courses = Course::where('published', '=', 1)
+                ->with('user.instructor')
+                ->when($request->filled('query'), function ($query) use ($request) {
+                    $query->where(function ($query) use ($request) {
+                        $query->where('title', 'like', '%' . $request->input('query') . '%')
+                            ->orWhere('description', 'like', '%' . $request->input('query') . '%');
+                    });
+                })
+                ->when($request->filled('category_slug'), function ($query) use ($request) {
+                    $query->whereExists(function ($subquery) use ($request) {
+                        $subquery->select(\DB::raw(1))
+                            ->from('categories')
+                            ->where('slug', $request->input('category_slug'))
+                            ->whereColumn('courses.category_id', 'categories.id');
+                    });
+                })
+                ->when($request->filled('course_level'), function ($query) use ($request) {
+                    $query->whereIn('level', $request->input('course_level'));
+                })
+                ->when($request->filled('course_type'), function ($query) use ($request) {
+                    $query->whereIn('course_type', $request->input('course_type'));
+                })
+                ->paginate(12);
+
+
+            return response(['data' => $courses, 'total' => $courses->total()], 200);
+
+        } catch (\Exception $exception) {
+            return response(['error' => $exception->getMessage()], 422);
+        }
     }
 }

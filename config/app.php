@@ -57,6 +57,7 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL'),
+    'livepetal_link' => env('LINK', 'http://localhost/livepetal/testapi/api/lentoria/apiclass.php'),
 
     /*
     |--------------------------------------------------------------------------

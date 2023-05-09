@@ -61,6 +61,7 @@ Route::post('/get_course_from_link/{link}/{ref?}', [CourseController::class, 'ge
 Route::get('/get_topic_by_slug/{slug}', [TopicController::class, 'findTopicbySlug']);
 Route::get('/get_category_by_slug/{slug}', [CategoryController::class, 'findCategoryBySlug']);
 
+Route::get('/all-courses', [CourseController::class, 'getCoursesForJson']);
 
 Route::get('/fetch_affiliate_questions', [QuestionaireController::class, 'fetchAffiliateQuestions']);
 Route::get('/fetch_instructor_questions', [QuestionaireController::class, 'fetchInstructorQuestions']);
@@ -68,7 +69,7 @@ Route::get('/fetch_instructor_questions', [QuestionaireController::class, 'fetch
 Route::post('/topics_by_categories', [TopicController::class, 'groupTopicsByCategoryId']);
 
 Route::get('compare_plan/{live_id}', [PackageController::class, 'comparePlan']);
-
+Route::post('search_courses',[CourseController::class,'searchCourses']);
 
 Route::group(['prefix' => 'affiliate', 'middleware' => ['auth:api']], function () {
     Route::get('all_transaction/{live_id}', [AffiliateController::class, 'getUsersAllTransactions']);
@@ -138,7 +139,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:api'
 
         // category routes
         Route::post('/add_category', [CategoryController::class, 'create']);
-        Route::post('/category', [CategoryController::class, 'update']);
+        Route::post('/category/{id}', [CategoryController::class, 'update']);
         Route::post('/status', [CategoryController::class, 'status']);
 
         // Topic routes

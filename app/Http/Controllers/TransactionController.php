@@ -29,7 +29,7 @@ class TransactionController extends Controller
         $request->transaction_id = mt_rand(100000000000, 999999999999);
 
         $course = Course::find($request->course_id);
-        $purchased = Transaction::where(['user_id' => $buyer->id, 'course_id' => $course->id])->count();
+        $purchased = Transaction::where(['user_id' => $buyer->id, 'course_id' => $course->id, 'status' => 1])->count();
         if ($purchased > 0) {
             return response(['message' => 'You have already purchased this course'], 406);
         }
@@ -49,7 +49,7 @@ class TransactionController extends Controller
             'status' => 0
         ]);
 
-        $res = Http::asForm()->post(env('LINK'), [
+        $res = Http::asForm()->post(config('app.livepetal_link'), [
             'purchaseCourse' => 256,
             'transaction_id' => $request->transaction_id,
             'course_id' => $course->id,
@@ -88,7 +88,7 @@ class TransactionController extends Controller
 
         $buyer = auth()->user();
         $course = Course::find($request->course_id);
-        $purchased = Transaction::where(['user_id' => $buyer->id, 'course_id' => $course->id])->count();
+        $purchased = Transaction::where(['user_id' => $buyer->id, 'course_id' => $course->id, 'status' => 1])->count();
         if ($purchased > 0) {
             return response(['message' => 'You have already purchased this course'], 406);
         }
@@ -108,7 +108,7 @@ class TransactionController extends Controller
             'status' => 0
         ]);
 
-        $res = Http::asForm()->post(env('LINK'), [
+        $res = Http::asForm()->post(config('app.livepetal_link'), [
             'purchaseCourse' => 256,
             'transaction_id' => $request->transaction_id,
             'course_id' => $course->id,
@@ -125,7 +125,7 @@ class TransactionController extends Controller
             ]);
 
             return response([
-                'message' => 'Course has been purchased/register for sucessfully'
+                'message' => 'Course has been purchased/register for successfully'
             ], 200);
         }
 
@@ -133,7 +133,6 @@ class TransactionController extends Controller
             'message' => 'Error processing transaction, Pls retry'
         ], 400);
     }
-
 
 
     function hasCourse(Request $request)
@@ -148,7 +147,7 @@ class TransactionController extends Controller
         }
         $purchased = Transaction::where(['user_id' => $request->user_id, 'course_id' => $request->course_id])->count();
         $course = Course::find($request->course_id);
-        if($course->user_id == $request->user_id || $purchased > 0) {
+        if ($course->user_id == $request->user_id || $purchased > 0) {
             return response([
                 'message' => 'User cannot purchase the course',
                 'status' => false,
@@ -201,16 +200,15 @@ class TransactionController extends Controller
             'user_id' => $user->id
         ]);
 
-        if($tran->status == 1) {
+        if ($tran->status == 1) {
 
         }
     }
 
 
-
     function fetchLiveBalance($live_id)
     {
-        $res = Http::asForm()->post(env('LINK') . '?balance=' . $live_id);
+        $res = Http::asForm()->post(config('app.livepetal_link') . '?balance=' . $live_id);
         return json_decode($res);
     }
 
