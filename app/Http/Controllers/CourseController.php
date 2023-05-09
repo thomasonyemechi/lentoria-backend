@@ -361,7 +361,7 @@ class CourseController extends Controller
         return response([
             'data' => [
                 'course_info' => collect($course)->forget('user')->only(['id', 'title', 'level', 'description', 'subtitle']),
-                'instructor_info' => collect($course->user)->forget('instructor')->only(['firstname', 'lastname', 'email']),
+                'instructor_info' => collect($course->user)->only(['firstname', 'lastname', 'email'])->merge(['image'=>$course->user->instructor->image]),
                 'wywl' => $course->info->what_you_will_learn,
             ],
         ]);
